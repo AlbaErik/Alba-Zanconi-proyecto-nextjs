@@ -1,8 +1,9 @@
 import React from 'react';
+import Link from 'next/link';
 
 const UserRegisteredLoginButton: React.FC = () => {
   return (
-    <button className="text-gray-600 hover:text-black hover:underline">Ingresar</button>
+    <Link href="/login" className="text-gray-600 hover:text-black hover:underline">Ingresar</Link>
   );
 }
 
