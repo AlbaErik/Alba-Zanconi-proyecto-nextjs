@@ -20,8 +20,8 @@ export default function Home() {
           />
       </div>
     
-      <div className ="flex mt-10 justify-evenly">
-        <div className="w-1/5">
+      <div className ="grid justify-items-center mt-10 md:flex md:justify-evenly">
+        <div className="w-1/2 sm:w-1/3 md:w-1/5 justify-self-center">
           <UserLabel/>
           <div className="flex justify-between">
             <UserRegisteredLoginButton/>
@@ -29,7 +29,7 @@ export default function Home() {
           </div>
         </div>
           
-        <div className="w-1/5">
+        <div className="w-1/2 sm:w-1/3 md:w-1/5 justify-self-center">
           <AdminLabel/>
           <AdminLoginButton/>
         </div>
