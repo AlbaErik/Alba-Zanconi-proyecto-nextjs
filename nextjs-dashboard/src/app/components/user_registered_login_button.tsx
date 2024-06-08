@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 const UserRegisteredLoginButton: React.FC = () => {
   return (
-    <Link href="/login" className="text-gray-600 hover:text-black hover:underline">Ingresar</Link>
+    <Link href="/account/login" className="text-gray-600 hover:text-black hover:underline">Ingresar</Link>
   );
 }
 
