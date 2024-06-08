@@ -4,7 +4,7 @@ export default function Home() {
   const cards = Array.from({ length: 20 });
   return (
     <main className="flex min-h-screen flex-col items-center justify-between pt-[3%] pl-[10%] pr-[10%]">
-      <div className="grid grid-cols-2 sm:grid-cols-3  md:grid-cols-4 lg:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8">
       {cards.map((_, index) => (
         <ProductCard 
           key={index}
