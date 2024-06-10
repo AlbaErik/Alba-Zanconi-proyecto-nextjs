@@ -13,7 +13,7 @@ export default function Home() {
           imageSrc ="/headphones.webp"
         />
       ))}
-    </div>
+      </div>
     </main>
   );
 }
