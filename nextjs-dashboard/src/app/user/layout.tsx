@@ -11,7 +11,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <div className="mx-[3%] sm:mx-[6%] md:mx-[10%] lg:mx-[15%] xl:mx-[20%] 2xl:[25%]">
+        <div className="mx-[3%] sm:mx-[6%] md:mx-[10%] lg:mx-[15%] xl:mx-[20%]">
 
           <div className= "mt-10 flex items-center">
             <div className="mr-4">
