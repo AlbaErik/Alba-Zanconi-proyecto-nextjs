@@ -7,7 +7,7 @@ import AdminLoginButton from './components/admin_login_button'
 
 export default function Home() {
   return (
-    <main className="">
+    <main className="mt-[5%]">
 
       <div className="flex justify-center">
         <Image
