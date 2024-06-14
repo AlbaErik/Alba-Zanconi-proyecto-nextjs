@@ -28,7 +28,6 @@ export async function fetchAllCategories(): Promise<string[]> {
     }
 }
 
-
 export async function fetchAllProducts() {
     try {
         const data = await sql`
@@ -49,6 +48,41 @@ export async function fetchAllProducts() {
     }
 }
 
+export type Order = {
+    id: string;
+    user_id: string;
+    total_amount: number;
+    items: any;
+    status: string;
+};
+
+export async function fetchAllOrders(): Promise<Order[]> {
+    try {
+        const data = await sql`
+            SELECT 
+                id,
+                user_id,
+                total_amount,
+                items,
+                status
+            FROM store.orders
+        `;
+
+        return data.rows.map(order => ({
+            id: order.id,
+            user_id: order.user_id,
+            total_amount: order.total_amount,
+            items: JSON.parse(order.items), // Parse items JSON string
+            status: order.status
+        }));
+    } catch (err) {
+        console.error('Database Error:', err);
+        throw new Error('Failed to fetch orders.');
+    }
+}
+
+
+/*
 export async function fetchAllOrders() {
     try {
         const data = await sql`
@@ -72,6 +106,7 @@ export async function fetchAllOrders() {
         throw new Error('Failed to fetch orders.');
     }
 }
+    */
 
 export async function getUser(email: string) {
     try {
@@ -174,3 +209,4 @@ export async function fetchOrdersListByUser(userId: string): Promise<string[]> {
         throw new Error('Failed to fetch orders by user.');
     }
 }
+

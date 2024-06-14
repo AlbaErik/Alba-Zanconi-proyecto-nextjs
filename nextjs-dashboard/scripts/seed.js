@@ -133,24 +133,24 @@ async function seedProducts(client) {
 async function seedOrders(client) {
     try {
         const createTable = await client.sql`
-      CREATE TABLE IF NOT EXISTS store.orders (
-        id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-        user_id UUID REFERENCES store.users(id),
-        total_amount NUMERIC(10, 2) NOT NULL,
-        items JSON NOT NULL,
-        status VARCHAR(50) NOT NULL
-      );
-    `;
+            CREATE TABLE IF NOT EXISTS store.orders (
+                id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+                user_id UUID REFERENCES store.users(id),
+                total_amount NUMERIC(10, 2) NOT NULL,
+                items JSON NOT NULL,
+                status VARCHAR(50) NOT NULL
+            );
+        `;
 
         console.log(`Created "orders" table`);
 
         const insertedOrders = await Promise.all(
             orders.map(
                 (order) => client.sql`
-          INSERT INTO store.orders (id, user_id, total_amount, items, status)
-          VALUES (${order.id}, ${order.userId}, ${order.totalAmount}, ${order.items}, ${order.status})
-          ON CONFLICT (id) DO NOTHING;
-        `,
+                    INSERT INTO store.orders (id, user_id, total_amount, items, status)
+                    VALUES (${order.id}, ${order.userId}, ${order.totalAmount}, ${JSON.stringify(order.items)}, ${order.status})
+                    ON CONFLICT (id) DO NOTHING;
+                `,
             ),
         );
 
@@ -165,6 +165,7 @@ async function seedOrders(client) {
         throw error;
     }
 }
+
 
 async function main() {
     const client = await db.connect();
