@@ -17,6 +17,16 @@ export type User = {
     role: string;
 };
 
+export async function fetchAllUsers(): Promise<User[]> {
+    try {
+        const data = await sql`SELECT * FROM store.users`;
+        return data.rows as User[];
+    } catch (err) {
+        console.error('Database Error:', err);
+        throw new Error('Failed to fetch users.');
+    }
+}
+
 export async function fetchAllCategories(): Promise<string[]> {
     try {
         const data = await sql`SELECT name FROM store.categories`;
