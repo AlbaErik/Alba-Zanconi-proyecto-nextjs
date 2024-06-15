@@ -4,9 +4,7 @@ import React from 'react';
 const SearchBar: React.FC = () => {
 
   function actualizarProductos(){
-    console.log("Actualizar Productos");
-    const divElement = document.getElementById('productos');
-    divElement?.innerHTML("")
+  
   }
 
   return (
