@@ -38,7 +38,16 @@ export async function fetchAllCategories(): Promise<string[]> {
     }
 }
 
-export async function fetchAllProducts() {
+export type ProductWithCategory = {
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    image_url: string;
+    category_name: string; // Cambiar el nombre aquí
+};
+
+export async function fetchAllProducts(): Promise<ProductWithCategory[]> {
     try {
         const data = await sql`
         SELECT 
@@ -47,16 +56,52 @@ export async function fetchAllProducts() {
           products.description,
           products.price,
           products.image_url,
-          categories.name AS category_name
+          products.category_id
         FROM store.products
-        JOIN store.categories ON products.category_id = categories.id
       `;
-        return data.rows;
+
+        // Mapear los productos para reemplazar category_id por category_name
+        const productsWithCategoryName: ProductWithCategory[] = await Promise.all(
+            data.rows.map(async (product) => {
+                const categoryName = await fetchCategoryById(product.category_id);
+                return {
+                    id: product.id,
+                    name: product.name,
+                    description: product.description,
+                    price: product.price,
+                    image_url: product.image_url,
+                    category_name: categoryName,
+                };
+            })
+        );
+
+        return productsWithCategoryName;
     } catch (err) {
         console.error('Database Error:', err);
         throw new Error('Failed to fetch products.');
     }
 }
+
+export async function fetchCategoryById(categoryId: string): Promise<string> {
+    try {
+        const data = await sql`
+        SELECT 
+          categories.name
+        FROM store.categories
+        WHERE categories.id = ${categoryId}
+      `;
+        if (data.rows.length > 0) {
+            return data.rows[0].name;
+        } else {
+            throw new Error(`Category with ID ${categoryId} not found.`);
+        }
+    } catch (err) {
+        console.error('Database Error:', err);
+        throw new Error('Failed to fetch category by ID.');
+    }
+}
+
+
 
 export type Order = {
     id: string;
@@ -90,33 +135,6 @@ export async function fetchAllOrders(): Promise<Order[]> {
         throw new Error('Failed to fetch orders.');
     }
 }
-
-
-/*
-export async function fetchAllOrders() {
-    try {
-        const data = await sql`
-        SELECT 
-          orders.id,
-          orders.user_id,
-          orders.total_amount,
-          orders.items,
-          orders.status
-        FROM store.orders
-      `;
-
-        const orders = data.rows.map(order => ({
-            ...order,
-            items: JSON.parse(order.items)
-        }));
-
-        return orders;
-    } catch (err) {
-        console.error('Database Error:', err);
-        throw new Error('Failed to fetch orders.');
-    }
-}
-    */
 
 export async function getUser(email: string) {
     try {
