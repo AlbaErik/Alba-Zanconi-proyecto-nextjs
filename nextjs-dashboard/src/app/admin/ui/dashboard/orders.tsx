@@ -1,4 +1,4 @@
-import { User, Product, Order, fetchAllUsers, fetchAllProducts, fetchAllOrders } from '@/app/lib/data';
+import { User, Product, Order, fetchAllOrders } from '@/app/lib/data';
 import React from 'react';
 import '@/app/admin/ui/style.css';
 
@@ -8,21 +8,21 @@ export default async function AllOrdersCards() {
   return (
     <>
       {orders.map(order => (
-        <Card key={order.id} title={order.id} value={order.total_amount} type="orders" data={order} />
+        <Card key={order.id} title={order.user_id} order={order} />
       ))}
     </>
   );
 }
 
-function Card({ title, value, type, data }: { title: string; value: number | string; type: 'users' | 'products' | 'orders'; data: User | Product | Order; }) {
+function Card({ title, order }: { title: string; order: Order }) {
 
   return (
     <div className="rounded-xl bg-red-50 p-2 shadow-sm">
       <div className="flex p-4">
-        <h3 className="ml-2 text-sm font-medium">{title}</h3>
+        <h3 className="ml-2 text-sm font-medium">Usuario: {title}</h3>
       </div>
       <div className="truncate rounded-xl bg-white px-4 py-8 text-center text-2xl">
-        {type === 'orders' && <OrderCard order={data as Order} />}
+        <OrderCard order={order as Order} />
       </div>
     </div>
   );
