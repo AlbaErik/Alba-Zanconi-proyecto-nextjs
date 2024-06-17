@@ -182,7 +182,7 @@ export async function getUser(email: string) {
 
 
 
-export async function fetchProductsByCategory(categoryId: string): Promise<Product[]> {
+export async function fetchProductsByCategory(categoryId: string): Promise<ProductWithCategory[]> {
     try {
         console.log("PRODUCTOS DATS.ts");
         const data = await sql`
@@ -192,13 +192,14 @@ export async function fetchProductsByCategory(categoryId: string): Promise<Produ
         WHERE category_id = ${categoryId}
       `;
         // Mapea los resultados a un array de objetos Product
-        const products: Product[] = data.rows.map(row => ({
+        const categoria = await fetchCategoryById(data.rows[0].category_id)
+        const products: ProductWithCategory[] = data.rows.map(row => ({
             id: row.id,
             name: row.name,
             description: row.description,
             price: row.price,
             image_url: row.image_url,
-            category_id: row.category_id
+            category_name: categoria,
         }));
 
         return products;

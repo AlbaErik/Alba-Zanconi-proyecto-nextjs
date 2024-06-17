@@ -7,7 +7,6 @@ import { ProductWithCategory } from "@/app/lib/data";
 
 export default function Home() {
   const params = useParams();
-  
   const [producto,setProducto] = useState<ProductWithCategory>();
 
   useEffect(() => {
@@ -28,7 +27,6 @@ export default function Home() {
   var title=""+producto?.name;
   var description=producto?.description;
   var price="$"+producto?.price;
-
   
   return (
     <main className="pt-[3%] px-[15%]">
