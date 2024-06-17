@@ -28,8 +28,8 @@ export default function Home() {
         <ProductCard 
           key={index}
           title={`${productos[index].name}`} 
-          price={`${productos[index].price}$`}
-          id={`${productos[index].id}$`}
+          price={`${productos[index].price}`}
+          id={`${productos[index].id}`}
           imageSrc ="/headphones.webp"
         />
       ))}

@@ -7,13 +7,13 @@ import { ProductWithCategory } from "@/app/lib/data";
 
 export default function Home() {
   const params = useParams();
-  /*
+  
   const [producto,setProducto] = useState<ProductWithCategory>();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/product${id}");
+        const response = await fetch("/api/product?id="+params.id);
         const data = await response.json();
         setProducto(data);
       } catch (error) {
@@ -24,12 +24,10 @@ export default function Home() {
     fetchData();
   }, []);
 
-  */
-  console.log("ID:"+params.id);
   var imageSrc="/headphones.webp";
-  var title="Titulo";
-  var description="Descripcion";
-  var price="Precio"
+  var title=""+producto?.name;
+  var description=producto?.description;
+  var price="$"+producto?.price;
 
   
   return (
@@ -44,10 +42,10 @@ export default function Home() {
               {title}
             </div>
             
-            <div className="text-2xl">
+            <div className="text-2xl pt-3">
               {description}
             </div>
-            <div className="text-4xl">
+            <div className="text-4xl mt-auto">
               {price}
             </div>
 
