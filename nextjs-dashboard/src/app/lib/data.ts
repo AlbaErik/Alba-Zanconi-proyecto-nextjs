@@ -82,6 +82,40 @@ export async function fetchAllProducts(): Promise<ProductWithCategory[]> {
     }
 }
 
+export async function fetchProductById(productId: string): Promise<ProductWithCategory> {
+    try {
+        const data = await sql`
+        SELECT 
+          products.id,
+          products.name,
+          products.description,
+          products.price,
+          products.image_url,
+          products.category_id
+        FROM store.products
+        WHERE products.id = ${productId}
+      `;
+      
+        if (data.rows.length > 0) {
+            const categoryName = await fetchCategoryById(data.rows[0].category_id);
+            const productWithCategoryName: ProductWithCategory = {
+                id: data.rows[0].id,
+                name: data.rows[0].name,
+                description: data.rows[0].description,
+                price: data.rows[0].price,
+                image_url: data.rows[0].image_url,
+                category_name: categoryName
+              }
+            return productWithCategoryName;
+        } else {
+            throw new Error(`Product with ID ${productId} not found.`);
+        }
+    } catch (err) {
+        console.error('Database Error:', err);
+        throw new Error('Failed to fetch product by ID.');
+    }
+}
+
 export async function fetchCategoryById(categoryId: string): Promise<string> {
     try {
         const data = await sql`

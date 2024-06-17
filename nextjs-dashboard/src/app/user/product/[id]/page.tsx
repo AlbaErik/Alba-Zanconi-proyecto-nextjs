@@ -1,11 +1,36 @@
+"use client";
 import Image from "next/image";
 import AddToCartButton from "./components/add_cart_button";
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from "react";
+import { ProductWithCategory } from "@/app/lib/data";
 
 export default function Home() {
+  const params = useParams();
+  /*
+  const [producto,setProducto] = useState<ProductWithCategory>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/product${id}");
+        const data = await response.json();
+        setProducto(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  */
+  console.log("ID:"+params.id);
   var imageSrc="/headphones.webp";
   var title="Titulo";
   var description="Descripcion";
   var price="Precio"
+
   
   return (
     <main className="pt-[3%] px-[15%]">

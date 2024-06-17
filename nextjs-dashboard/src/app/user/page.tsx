@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import ProductCard from "./components/product_card"
-import { ProductWithCategory, fetchAllProducts } from '../lib/data';
+import { ProductWithCategory } from '../lib/data';
 
 export default function Home() {
   
@@ -29,6 +29,7 @@ export default function Home() {
           key={index}
           title={`${productos[index].name}`} 
           price={`${productos[index].price}$`}
+          id={`${productos[index].id}$`}
           imageSrc ="/headphones.webp"
         />
       ))}
