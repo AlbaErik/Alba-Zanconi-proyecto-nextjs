@@ -1,7 +1,10 @@
+"use client";
 import CartCard from "./components/cart_card";
 import CheckoutButton from "./components/checkout_button";
+import { AppWrapper, useAppContext } from "@/app/context";
 
 export default function Home() {
+  const {} = useAppContext();
   const cards = Array.from({ length: 5 });
     return (
       <main className="pt-[1%]">
