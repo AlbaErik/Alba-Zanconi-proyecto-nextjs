@@ -14,16 +14,16 @@ const CartCard: React.FC<CardProps> = ({ title, price, imageSrc, cantidad }) => 
         <Image className="card-image" src={imageSrc} alt={title} width={100} height={30}/>
     </div>
     
-    <div className="flex items-center justify-center text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+    <div className="flex items-center justify-center text-xl font-semibold tracking-tight text-gray-900 ">
         {title}
     </div>
 
-    <div className="flex items-center justify-center text-3xl font-bold text-gray-900 dark:text-white">{price}</div>
+    <div className="flex items-center justify-center text-3xl font-bold text-gray-900 ">{price}</div>
     <div className="flex items-center justify-evenly">
         <button className="flex overflow-hidden items-center justify-center text-3xl font-bold text-gray-900 hover:bg-green-500 rounded-lg h-8">
             +
         </button>
-        <div className="flex items-center justify-center text-2xl font-bold text-gray-900 tracking-tight dark:text-white h-8">
+        <div className="flex items-center justify-center text-2xl font-bold text-gray-900 tracking-tight  h-8">
             {cantidad}
         </div>
         <button className="flex overflow-hidden items-center justify-center text-3xl font-bold text-gray-900 hover:bg-red-500 rounded-lg h-8">
