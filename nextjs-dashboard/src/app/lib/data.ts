@@ -135,8 +135,6 @@ export async function fetchCategoryById(categoryId: string): Promise<string> {
     }
 }
 
-
-
 export type Order = {
     id: string;
     user_id: string;
@@ -180,8 +178,6 @@ export async function getUser(email: string) {
     }
 }
 
-
-
 export async function fetchProductsByCategory(categoryId: string): Promise<ProductWithCategory[]> {
     try {
         console.log("PRODUCTOS DATS.ts");
@@ -209,7 +205,6 @@ export async function fetchProductsByCategory(categoryId: string): Promise<Produ
     }
 }
 
-
 export async function fetchIdCategoryByName(categoryName: string): Promise<string[]> {
     try {
         const data = await sql`
@@ -227,7 +222,6 @@ export async function fetchIdCategoryByName(categoryName: string): Promise<strin
         throw new Error('Failed to fetch products by category.');
     }
 }
-
 
 export async function fetchOrdersByUser(userId: string) {
     try {
@@ -272,4 +266,3 @@ export async function fetchOrdersListByUser(userId: string): Promise<string[]> {
         throw new Error('Failed to fetch orders by user.');
     }
 }
-

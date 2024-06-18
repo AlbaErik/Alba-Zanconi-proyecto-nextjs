@@ -3,7 +3,6 @@ import {fetchProductById} from '@/app/lib/data';
 export async function GET(req: any){ 
   const url = new URL(req.url);
   const searchParams = url.searchParams;
-  console.log("Parametro: "+searchParams.get('id'));
   const id = ""+searchParams.get('id');
 
   if(searchParams.get('id')==null){
