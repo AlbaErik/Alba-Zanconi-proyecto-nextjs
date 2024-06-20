@@ -16,6 +16,10 @@ const ProductCard: React.FC<CardProps> = ({ title, price, id, imageSrc }) => {
   const { state, setState }= useAppContext();
   const [executeEffect, setExecuteEffect] = useState(false);
 
+  const handleButtonClick = () => {
+    setExecuteEffect(true);
+  };
+
   function productoEnCarrito(): boolean{
     let toReturn = false;
     /*
@@ -27,7 +31,6 @@ const ProductCard: React.FC<CardProps> = ({ title, price, id, imageSrc }) => {
       
     });
     */
-
     return toReturn;
   }
 
@@ -54,10 +57,6 @@ const ProductCard: React.FC<CardProps> = ({ title, price, id, imageSrc }) => {
       setExecuteEffect(false);
     }
   }, [executeEffect]);
-  
-  const handleButtonClick = () => {
-    setExecuteEffect(true);
-  };
   
   return (
     <div className="card rounded-lg bg-white shadow-md">
