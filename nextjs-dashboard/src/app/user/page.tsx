@@ -21,9 +21,8 @@ export default function Home() {
       try {
         const response = await fetch("/api/products");
         const data = await response.json();
-        const dataLength = data.length;
-        if(dataLength>0){
-          setCantPaginas(Math.ceil(dataLength/CANTIDAD_PRODUCTOS_MOSTRADOS));
+        if(data.length>0){
+          setCantPaginas(Math.ceil(data.length/CANTIDAD_PRODUCTOS_MOSTRADOS));
           setProductos(data);
         }
         
@@ -35,18 +34,16 @@ export default function Home() {
     fetchData();
   }, []);
 
-  //Use effect utilizado para mostrar las product cards correspondientes a la pagina en cuestion
+  //Use effect utilizado para mostrar las product cards correspondientes al numero de pagina en cuestion
   useEffect(() => {
     if(productos.length>0){
-      let newProducts: ProductWithCategory[] =  [];
+      let newProducts: ProductWithCategory[] = [];
       let i = (paginaActual-1)*CANTIDAD_PRODUCTOS_MOSTRADOS;
       let j = Math.min(productos.length,i+CANTIDAD_PRODUCTOS_MOSTRADOS)
       for(i;i<j;i++){
-        console.log("I:"+i)
         newProducts.push(productos[i]);
       }  
       setProductosMostrados(newProducts);
-      
     }
   }, [productos, paginaActual]);
 
@@ -75,7 +72,6 @@ export default function Home() {
         activeClassName={'text-blue-500'}
         pageClassName={'hover:underline'}
       />
-  
     </main>
   );
 }
