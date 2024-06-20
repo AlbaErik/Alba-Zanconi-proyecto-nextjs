@@ -1,4 +1,5 @@
 import "./globals.css";
+import { AppWrapper } from "./context";
 
 export default function RootLayout({
   children,
@@ -8,7 +9,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen pt-[1%]">
-        {children}
+        <AppWrapper>
+          {children}
+        </AppWrapper>  
       </body>
     </html>
   );
