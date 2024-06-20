@@ -16,12 +16,33 @@ const ProductCard: React.FC<CardProps> = ({ title, price, id, imageSrc }) => {
   const { state, setState }= useAppContext();
   const [executeEffect, setExecuteEffect] = useState(false);
 
+  function productoEnCarrito(): boolean{
+    let toReturn = false;
+    /*
+    state.forEach(element => {
+      if(element.id===id){
+        toReturn = true;
+        break;
+      }
+      
+    });
+    */
+
+    return toReturn;
+  }
+
   useEffect(() => {
     if(executeEffect){
       const fetchData = async () => {
         try {
           const response = await fetch("/api/product?id="+id);
           const data = await response.json();
+          if(productoEnCarrito()){
+            
+          }
+          else{
+
+          }
           setState(state.push(data));
           console.log("Cart State: "+JSON.stringify(state));
   
@@ -56,7 +77,6 @@ const ProductCard: React.FC<CardProps> = ({ title, price, id, imageSrc }) => {
       
     </div>
   );
-
 }
 
 export default ProductCard;
