@@ -1,6 +1,6 @@
 "use client";
 import CartCard from "./components/cart_card";
-import CheckoutButton from "./components/checkout_button";
+import { initMercadoPago, Wallet } from '@mercadopago/sdk-react'
 import { ProductoEnCarrito, useAppContext } from "@/app/context";
 import { useEffect, useState } from "react";
 
@@ -11,6 +11,7 @@ export default function Home() {
 
   useEffect(() => {
     setProductos(state);
+    initMercadoPago('APP_USR-cf082da5-a989-4d78-8c11-9b80f90da071', { locale: 'es-AR' });
   },[]);
 
   useEffect(() => {
@@ -37,7 +38,7 @@ export default function Home() {
         </div>
 
         <div className="flex justify-center mb-[20%]">
-          <CheckoutButton/>
+          <Wallet initialization={{preferenceId: 'id_preferencia'}} />
         </div>
       </main>
     );
