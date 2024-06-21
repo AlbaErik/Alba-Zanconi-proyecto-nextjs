@@ -1,24 +1,37 @@
 "use client";
 import CartCard from "./components/cart_card";
 import CheckoutButton from "./components/checkout_button";
-import { AppWrapper, useAppContext } from "@/app/context";
+import { ProductoEnCarrito, useAppContext } from "@/app/context";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-  const {} = useAppContext();
-  const cards = Array.from({ length: 5 });
+  
+  const { state } = useAppContext();
+  const [productos,setProductos] = useState<ProductoEnCarrito[]>([]);
+
+  useEffect(() => {
+    console.log("Use effect carrito render");
+    setProductos(state);
+  
+  }, []);
+
+  useEffect(() => {
+    
+  }, [productos]);
+
     return (
       <main className="pt-[1%]">
         <div className="text-center text-5xl">
           Carrito
         </div>
         <div className="pt-[1%] w-3/4 sm:w-1/2 mx-auto">
-          {cards.map((_, index) => (
+          {productos.map((_, index) => (
           <CartCard
             key={index}
-            title={`Producto ${index + 1}`} 
-            price={`${index + 1}$`}
+            name={`${state[index].name}`} 
+            price={`$${state[index].price}`}
             imageSrc ="/headphones.webp"
-            cantidad={1}
+            cantidad={state[index].quantity}
           />
           ))}
         

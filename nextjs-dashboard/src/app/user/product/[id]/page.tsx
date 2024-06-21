@@ -3,7 +3,6 @@ import Image from "next/image";
 import AddToCartButton from "./components/add_cart_button";
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from "react";
-import { ProductWithCategory } from "@/app/lib/data";
 
 export default function Home() {
   const params = useParams();
