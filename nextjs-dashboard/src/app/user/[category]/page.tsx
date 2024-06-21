@@ -29,10 +29,12 @@ export default function Home() {
       {productos.map((_, index) => (
         <ProductCard 
           key={index}
-          title={`${productos[index].name}`} 
-          price={`${productos[index].price}`}
+          name={`${productos[index].name}`} 
+          price={productos[index].price}
           id={`${productos[index].id}`}
           imageSrc ="/headphones.webp"
+          description={`${productos[index].description}`}
+          category_name={`${productos[index].category_name}`}
         />
       ))}
       </div>
