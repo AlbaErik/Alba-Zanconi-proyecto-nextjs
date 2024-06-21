@@ -18,7 +18,7 @@ export default function Home() {
         const data = await response.json();
         setName(data.name);
         setDescription(data.description);
-        setPrice(data.price);
+        setPrice("$"+data.price);
       } catch (error) {
         console.error('Error fetching data:', error);
       }

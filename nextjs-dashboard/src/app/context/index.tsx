@@ -15,10 +15,9 @@ const AppContext = createContext<any>(undefined);
 
 export function AppWrapper({children} : {children: React.ReactNode}){
     let [state,setState] = useState<ProductoEnCarrito[]>([]);
-    let [timer,setTimer] = useState<boolean>(false);
 
     return (
-        <AppContext.Provider value={{state,setState,timer,setTimer}}>
+        <AppContext.Provider value={{state,setState}}>
             {children}
         </AppContext.Provider>
     )

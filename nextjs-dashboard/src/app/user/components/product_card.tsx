@@ -14,24 +14,13 @@ interface CardProps {
 }
 
 const ProductCard: React.FC<CardProps> = ({ name, price, id, imageSrc, description, category_name}) => {
-  const {timer, setTimer} = useAppContext();
   const { state, setState } = useAppContext();
   const [executeEffect, setExecuteEffect] = useState(false);
   const [disabled, setDisabled] = useState(false);
-  function iniciarContador(){
-    setTimer(true);
-    setTimeout(() => {
-      //console.log('Pasaron 3 segundos!');
-    }, 3000);
-    setTimer(false);
-  }
 
   const handleButtonClick = () => {
-    if(!timer){
-      iniciarContador()
       setDisabled(true);
       setExecuteEffect(true);
-    }  
   };
 
   function buscarProductoEnCarrito(): number{
@@ -72,6 +61,11 @@ const ProductCard: React.FC<CardProps> = ({ name, price, id, imageSrc, descripti
         }
 
         setState(productos);
+
+        console.log("Carrito:");
+        for(let i=0;i<state.length;i++){
+          console.log("Producto: "+state[i].name+" Cantidad: "+state[i].quantity);
+        }
         
         setDisabled(false);
         setExecuteEffect(false);
