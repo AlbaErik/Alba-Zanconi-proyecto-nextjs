@@ -15,9 +15,9 @@ const AppContext = createContext<any>(undefined);
 
 export function AppWrapper({children} : {children: React.ReactNode}){
     let [state,setState] = useState<ProductoEnCarrito[]>([]);
-
+    let [disabled, setDisabled] = useState<boolean>(false);
     return (
-        <AppContext.Provider value={{state,setState}}>
+        <AppContext.Provider value={{state,setState,disabled,setDisabled}}>
             {children}
         </AppContext.Provider>
     )
