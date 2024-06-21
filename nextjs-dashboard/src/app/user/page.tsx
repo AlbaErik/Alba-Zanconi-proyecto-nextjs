@@ -49,7 +49,7 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between pt-[3%] pl-[10%] pr-[10%]">
-      <div id="productos" className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8">
+      <div id="productos" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full">
       {productosMostrados.map((_, index) => (
         <ProductCard 
           key={index}
@@ -62,7 +62,7 @@ export default function Home() {
         />
       ))}
       </div>
-      <ReactPaginate className="flex gap-5 mb-10"
+      <ReactPaginate className="flex gap-5 mb-10 pt-5"
         previousLabel={null}
         nextLabel={null}
         breakLabel={'...'}
