@@ -2,6 +2,7 @@ import Image from "next/image";
 import NavigationBar from "./components/navigation_bar"
 import LoginButton from "./components/login_button"
 import SearchBar from "./components/search_bar"
+import CartButton from "./components/cart_button";
 
 export default function RootLayout({
   children,
@@ -31,15 +32,8 @@ export default function RootLayout({
               <LoginButton/>
             </div>
 
-            <div>
-              <Image
-                className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-                src="/shopping-cart-icon.webp"
-                alt="Imagen carrito"
-                width={60}
-                height={20}
-                priority
-              />
+            <div className="h-10">
+              <CartButton/>
             </div>
           </div>
 

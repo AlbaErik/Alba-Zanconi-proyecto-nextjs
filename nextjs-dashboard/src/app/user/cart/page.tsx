@@ -11,9 +11,10 @@ export default function Home() {
 
   useEffect(() => {
     console.log("Use effect carrito render");
+    console.log("Carrito:"+JSON.stringify(state));
     setProductos(state);
   
-  }, []);
+  },);
 
   useEffect(() => {
     
