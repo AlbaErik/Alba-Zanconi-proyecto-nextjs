@@ -44,7 +44,7 @@ export type ProductWithCategory = {
     description: string;
     price: number;
     image_url: string;
-    category_name: string; // Cambiar el nombre aquí
+    category_name: string;
 };
 
 export async function fetchAllProducts(): Promise<ProductWithCategory[]> {
@@ -95,7 +95,7 @@ export async function fetchProductById(productId: string): Promise<ProductWithCa
         FROM store.products
         WHERE products.id = ${productId}
       `;
-      
+
         if (data.rows.length > 0) {
             const categoryName = await fetchCategoryById(data.rows[0].category_id);
             const productWithCategoryName: ProductWithCategory = {
@@ -105,7 +105,7 @@ export async function fetchProductById(productId: string): Promise<ProductWithCa
                 price: data.rows[0].price,
                 image_url: data.rows[0].image_url,
                 category_name: categoryName
-              }
+            }
             return productWithCategoryName;
         } else {
             throw new Error(`Product with ID ${productId} not found.`);
@@ -134,34 +134,86 @@ export async function fetchCategoryById(categoryId: string): Promise<string> {
         throw new Error('Failed to fetch category by ID.');
     }
 }
+export type OrderItem = {
+    productId: string;
+    quantity: number;
+    productName: string;
+    price: number;
+};
 
 export type Order = {
     id: string;
-    user_id: string;
+    user_name: string;
     total_amount: number;
-    items: any;
+    items: OrderItem[];
     status: string;
 };
+
+export async function fetchProductNameById(productId: string): Promise<string> {
+    try {
+        const data = await sql`
+            SELECT name FROM store.products WHERE id = ${productId}
+        `;
+        if (data.rows.length > 0) {
+            return data.rows[0].name;
+        } else {
+            throw new Error(`Product with ID ${productId} not found.`);
+        }
+    } catch (err) {
+        console.error('Database Error:', err);
+        throw new Error('Failed to fetch product name.');
+    }
+}
+
+export async function fetchProductPriceById(productId: string): Promise<number> {
+    try {
+        const data = await sql`
+            SELECT price FROM store.products WHERE id = ${productId}
+        `;
+        if (data.rows.length > 0) {
+            return data.rows[0].price;
+        } else {
+            throw new Error(`Product with ID ${productId} not found.`);
+        }
+    } catch (err) {
+        console.error('Database Error:', err);
+        throw new Error('Failed to fetch product name.');
+    }
+}
+
+export async function processOrderItems(items: { productId: string; quantity: number }[]): Promise<OrderItem[]> {
+    const processedItems = await Promise.all(items.map(async item => {
+        const productName = await fetchProductNameById(item.productId);
+        return {
+            productId: item.productId,
+            quantity: item.quantity,
+            productName,
+            price: await fetchProductPriceById(item.productId),
+        };
+    }));
+    return processedItems;
+}
 
 export async function fetchAllOrders(): Promise<Order[]> {
     try {
         const data = await sql`
             SELECT 
-                id,
-                user_id,
-                total_amount,
-                items,
-                status
+                orders.id,
+                users.name as user_name,
+                orders.total_amount,
+                orders.items,
+                orders.status
             FROM store.orders
+            JOIN store.users ON store.orders.user_id = store.users.id
         `;
 
-        return data.rows.map(order => ({
+        return await Promise.all(data.rows.map(async (order) => ({
             id: order.id,
-            user_id: order.user_id,
+            user_name: order.user_name,
             total_amount: order.total_amount,
-            items: JSON.parse(order.items), // Parse items JSON string
+            items: await processOrderItems(JSON.parse(order.items)),
             status: order.status
-        }));
+        })));
     } catch (err) {
         console.error('Database Error:', err);
         throw new Error('Failed to fetch orders.');

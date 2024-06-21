@@ -1,4 +1,4 @@
-import { User, Product, Order, fetchAllOrders } from '@/app/lib/data';
+import { Order, fetchAllOrders } from '@/app/lib/data';
 import React from 'react';
 import '@/app/admin/ui/style.css';
 
@@ -8,7 +8,7 @@ export default async function AllOrdersCards() {
   return (
     <>
       {orders.map(order => (
-        <Card key={order.id} title={order.user_id} order={order} />
+        <Card key={order.id} title={order.user_name} order={order} />
       ))}
     </>
   );
@@ -33,7 +33,13 @@ function OrderCard({ order }: { order: Order }) {
     <div>
       <p>Total Amount: ${order.total_amount}</p>
       <p>Status: {order.status}</p>
-      <p>Items: {JSON.stringify(order.items)}</p>
+      <ul>
+        {order.items.map(item => (
+          <li key={item.productId}>
+            {item.productName} - Price: ${item.price} - Quantity: {item.quantity}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
