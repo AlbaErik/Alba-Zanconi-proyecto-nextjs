@@ -53,10 +53,12 @@ export default function Home() {
       {productosMostrados.map((_, index) => (
         <ProductCard 
           key={index}
-          title={`${productosMostrados[index].name}`} 
-          price={`${productosMostrados[index].price}`}
+          name={`${productosMostrados[index].name}`} 
+          price={productosMostrados[index].price}
           id={`${productosMostrados[index].id}`}
           imageSrc ="/headphones.webp"
+          description={`${productosMostrados[index].description}`} 
+          category_name={`${productosMostrados[index].category_name}`} 
         />
       ))}
       </div>

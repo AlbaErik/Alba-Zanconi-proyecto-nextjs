@@ -2,74 +2,99 @@
 import React, { useEffect, useState } from 'react';
 import Image from "next/image";
 import Link from 'next/link';
-import { useAppContext } from '@/app/context';
+import { ProductoEnCarrito, useAppContext } from '@/app/context';
 
 interface CardProps {
-  title: string;
-  price: string;
+  name: string;
+  price: number;
   id: string;
   imageSrc: string;
+  description: string;
+  category_name: string
 }
 
-const ProductCard: React.FC<CardProps> = ({ title, price, id, imageSrc }) => {
-
-  const { state, setState }= useAppContext();
+const ProductCard: React.FC<CardProps> = ({ name, price, id, imageSrc, description, category_name}) => {
+  const {timer, setTimer} = useAppContext();
+  const { state, setState } = useAppContext();
   const [executeEffect, setExecuteEffect] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+  function iniciarContador(){
+    setTimer(true);
+    setTimeout(() => {
+      //console.log('Pasaron 3 segundos!');
+    }, 3000);
+    setTimer(false);
+  }
 
   const handleButtonClick = () => {
-    setExecuteEffect(true);
+    if(!timer){
+      iniciarContador()
+      setDisabled(true);
+      setExecuteEffect(true);
+    }  
   };
 
-  function productoEnCarrito(): boolean{
-    let toReturn = false;
-    /*
-    state.forEach(element => {
-      if(element.id===id){
-        toReturn = true;
-        break;
+  function buscarProductoEnCarrito(): number{
+    let indice = 0;
+    let i = 0;
+    while(indice === 0 && i<state.length){
+      if(state[i].id===id){
+        indice = i;
       }
-      
-    });
-    */
-    return toReturn;
+      else{
+        i++
+      }
+    }
+    return indice;
   }
 
   useEffect(() => {
-    if(executeEffect){
-      const fetchData = async () => {
-        try {
-          const response = await fetch("/api/product?id="+id);
-          const data = await response.json();
-          if(productoEnCarrito()){
-            
-          }
-          else{
-
-          }
-          setState(state.push(data));
-          console.log("Cart State: "+JSON.stringify(state));
-  
-        } catch (error) {
-          console.error('Error fetching data:', error);
+    const agregarProducto = async () => {
+      if(executeEffect){
+        let productos: ProductoEnCarrito[] = [...state];
+        let indice = buscarProductoEnCarrito();
+        
+        //Se ejecuta cuando el indice es distinto de 0 (El producto estaba en el carrito)
+        if(indice){
+          productos[indice].quantity=productos[indice].quantity+1;
         }
-      };
-      fetchData();
-      setExecuteEffect(false);
+        else{
+          let producto: ProductoEnCarrito  = {
+            id: id,
+            name: name,
+            description: description,
+            price: price,
+            image_url: imageSrc,
+            category_name: category_name,
+            quantity: 1
+          }
+          productos.push(producto);
+        }
+
+        setState(productos);
+        
+        setDisabled(false);
+        setExecuteEffect(false);
+      }
     }
+
+    agregarProducto();
   }, [executeEffect]);
   
   return (
     <div className="card rounded-lg bg-white shadow-md">
+
       <div className="grid justify-items-center">
-          <Image className="card-image" src={imageSrc} alt={title} width={200} height={30}/>
+          <Image className="card-image" src={imageSrc} alt={name} width={200} height={30}/>
       </div>
       
       <Link href={{pathname: `/user/product/${id}`,}} className="flex px-[5%] text-xl font-semibold tracking-tight text-gray-900 hover:underline">
-        {title}
+        {name}
       </Link>
+
       <div className="flex items-center justify-between mb-3 mt-3">
         <h3 className="pl-[5%] text-3xl font-bold text-gray-900 ">{"$"+price}</h3>
-        <button onClick={handleButtonClick} className="mr-[5%] pr-3 pl-3 overflow-hidden inline-block align-middle text-center text-white hover:bg-cyan-800 bg-cyan-700 rounded-lg h-8">
+        <button onClick={handleButtonClick} disabled={disabled} className="mr-[5%] pr-3 pl-3 overflow-hidden inline-block align-middle text-center text-white hover:bg-cyan-800 bg-cyan-700 rounded-lg h-8">
           Agregar
         </button>
       </div>
