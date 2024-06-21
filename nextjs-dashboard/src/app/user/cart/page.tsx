@@ -10,15 +10,12 @@ export default function Home() {
   const [productos,setProductos] = useState<ProductoEnCarrito[]>([]);
 
   useEffect(() => {
-    console.log("Use effect carrito render");
-    console.log("Carrito:"+JSON.stringify(state));
     setProductos(state);
-  
-  },);
+  },[]);
 
   useEffect(() => {
-    
-  }, [productos]);
+    setProductos([...state]);
+  }, [state]);
 
     return (
       <main className="pt-[1%]">
@@ -29,10 +26,11 @@ export default function Home() {
           {productos.map((_, index) => (
           <CartCard
             key={index}
-            name={`${state[index].name}`} 
-            price={`$${state[index].price}`}
+            id={`${productos[index].id}`}
+            name={`${productos[index].name}`} 
+            price={`$${productos[index].price}`}
             imageSrc ="/headphones.webp"
-            cantidad={state[index].quantity}
+            cantidad={productos[index].quantity}
           />
           ))}
         
