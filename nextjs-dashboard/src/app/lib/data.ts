@@ -1,4 +1,5 @@
 import { sql } from '@vercel/postgres';
+import { unstable_noStore as noStore } from 'next/cache';
 
 export type Product = {
     id: string;
@@ -28,6 +29,7 @@ export async function fetchAllUsers(): Promise<User[]> {
 }
 
 export async function fetchAllCategories(): Promise<string[]> {
+    noStore();
     try {
         const data = await sql`SELECT name FROM store.categories`;
         const categoryNames = data.rows.map(row => row.name);
@@ -48,6 +50,7 @@ export type ProductWithCategory = {
 };
 
 export async function fetchAllProducts(): Promise<ProductWithCategory[]> {
+    noStore()
     try {
         const data = await sql`
         SELECT 
@@ -83,6 +86,7 @@ export async function fetchAllProducts(): Promise<ProductWithCategory[]> {
 }
 
 export async function fetchProductById(productId: string): Promise<ProductWithCategory> {
+    noStore()
     try {
         const data = await sql`
         SELECT 
@@ -117,6 +121,7 @@ export async function fetchProductById(productId: string): Promise<ProductWithCa
 }
 
 export async function fetchCategoryById(categoryId: string): Promise<string> {
+    noStore();
     try {
         const data = await sql`
         SELECT 
@@ -195,6 +200,7 @@ export async function processOrderItems(items: { productId: string; quantity: nu
 }
 
 export async function fetchAllOrders(): Promise<Order[]> {
+    noStore();
     try {
         const data = await sql`
             SELECT 
@@ -221,6 +227,7 @@ export async function fetchAllOrders(): Promise<Order[]> {
 }
 
 export async function getUser(email: string) {
+    noStore();
     try {
         const user = await sql`SELECT * FROM store.users WHERE email=${email}`;
         return user.rows[0] as User;
@@ -231,6 +238,7 @@ export async function getUser(email: string) {
 }
 
 export async function fetchProductsByCategory(categoryId: string): Promise<ProductWithCategory[]> {
+    noStore();
     try {
         console.log("PRODUCTOS DATS.ts");
         const data = await sql`
@@ -258,6 +266,7 @@ export async function fetchProductsByCategory(categoryId: string): Promise<Produ
 }
 
 export async function fetchIdCategoryByName(categoryName: string): Promise<string[]> {
+    noStore();
     try {
         const data = await sql`
         SELECT 
@@ -276,6 +285,7 @@ export async function fetchIdCategoryByName(categoryName: string): Promise<strin
 }
 
 export async function fetchOrdersByUser(userId: string) {
+    noStore();
     try {
         const data = await sql`
         SELECT 
@@ -302,6 +312,7 @@ export async function fetchOrdersByUser(userId: string) {
 }
 
 export async function fetchOrdersListByUser(userId: string): Promise<string[]> {
+    noStore();
     try {
         const data = await sql`
         SELECT 
