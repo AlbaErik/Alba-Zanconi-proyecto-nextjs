@@ -50,7 +50,7 @@ export type ProductWithCategory = {
 };
 
 export async function fetchAllProducts(): Promise<ProductWithCategory[]> {
-    noStore()
+    //noStore()
     try {
         const data = await sql`
         SELECT 
