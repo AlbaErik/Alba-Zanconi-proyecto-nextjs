@@ -9,13 +9,12 @@ export default function Home() {
   const { state } = useAppContext();
   const [productos,setProductos] = useState<ProductoEnCarrito[]>([]);
   const [idPreferencia, setIdPreferencia] = useState<string>("");
+  const [reenderizando, setReenderizando] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-
         const items = "{ items:"+JSON.stringify(productos)+" }"
-        console.log(items);
 
         const response = await fetch("/api/checkout",{
           method: 'POST',
@@ -26,24 +25,25 @@ export default function Home() {
         });
         const preferencia = await response.json();
         setIdPreferencia(preferencia.id)
-        console.log(preferencia);
         
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-    fetchData();
     
-  },[productos]);
+    fetchData(); 
+  },[state]);
 
   useEffect(() => {
-    setProductos(state);
-    initMercadoPago('APP_USR-cf082da5-a989-4d78-8c11-9b80f90da071', { locale: 'es-AR' });
+    if(!reenderizando){
+      setReenderizando(true);
+      setProductos(state);
+      initMercadoPago('APP_USR-cf082da5-a989-4d78-8c11-9b80f90da071', { locale: 'es-AR' });
+    }
   },[]);
 
   useEffect(() => {
     setProductos([...state]);
-    console.log(JSON.stringify(productos));
   }, [state]);
 
     return (
@@ -62,9 +62,7 @@ export default function Home() {
             cantidad={productos[index].quantity}
           />
           ))}
-        
         </div>
-
         <div className="flex justify-center mb-[20%]">
           <Wallet initialization={{preferenceId: idPreferencia}} />
         </div>

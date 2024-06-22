@@ -24,7 +24,7 @@ const ProductCard: React.FC<CardProps> = ({ name, price, id, imageSrc, descripti
     if(!disabled){
       setDisabled(true);
       setExecuteEffect(true);
-      await sleep(3000);      //Se deshabilita la funcion de agregar un producto por 3 segundos luego de agregar un producto
+      await sleep(1000);      //Se deshabilita la funcion de agregar un producto por 3 segundos luego de agregar un producto
       setDisabled(false);
     } 
   };
