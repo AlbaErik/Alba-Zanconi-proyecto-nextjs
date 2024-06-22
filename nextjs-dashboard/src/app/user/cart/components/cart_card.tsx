@@ -5,7 +5,7 @@ import { useAppContext } from '@/app/context';
 interface CardProps {
   id: string;
   name: string;
-  price: string;
+  price: number;
   imageSrc: string;
   cantidad: number
 }
@@ -55,7 +55,7 @@ const CartCard: React.FC<CardProps> = ({ id, name, price, imageSrc, cantidad }) 
         {name}
     </div>
 
-    <div className="flex items-center justify-center text-3xl font-bold text-gray-900 ">{price}</div>
+    <div className="flex items-center justify-center text-3xl font-bold text-gray-900 ">{"$"+price}</div>
     
     <div className="flex items-center justify-evenly">
         <button onClick={addProduct} className="flex overflow-hidden items-center justify-center text-3xl font-bold text-gray-900 hover:bg-green-500 rounded-lg h-8">

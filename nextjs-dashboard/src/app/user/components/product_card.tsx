@@ -56,11 +56,11 @@ const ProductCard: React.FC<CardProps> = ({ name, price, id, imageSrc, descripti
         else{
           let producto: ProductoEnCarrito  = {
             id: id,
-            name: name,
+            title: name,
             description: description,
-            price: price,
-            image_url: imageSrc,
-            category_name: category_name,
+            unit_price: +price,
+            picture_url: imageSrc,
+            category_id: category_name,
             quantity: 1
           }
           productos.push(producto);

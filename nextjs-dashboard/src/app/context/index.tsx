@@ -3,11 +3,11 @@ import { createContext, useContext, useState } from "react";
 
 export type ProductoEnCarrito = {
     id: string
-    name: string
+    title: string
     description: string
-    price: number
-    image_url: string
-    category_name: string
+    unit_price: number
+    picture_url: string
+    category_id: string
     quantity: number
   };
 

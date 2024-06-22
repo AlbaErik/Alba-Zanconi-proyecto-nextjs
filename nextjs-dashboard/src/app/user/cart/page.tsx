@@ -8,6 +8,33 @@ export default function Home() {
   
   const { state } = useAppContext();
   const [productos,setProductos] = useState<ProductoEnCarrito[]>([]);
+  const [idPreferencia,setIdPreferencia] = useState<string>("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+
+        const items = "{ items:"+JSON.stringify(productos)+" }"
+        console.log(items);
+
+        const response = await fetch("/api/checkout",{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer APP_USR-1502233372912133-062115-a7b332adf287f355466565f8f88abac2-1521091531'
+          },
+          body: items
+        });
+        const preferencia = await response.json();
+        console.log(preferencia);
+        
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+    
+  },[productos]);
 
   useEffect(() => {
     setProductos(state);
@@ -16,6 +43,7 @@ export default function Home() {
 
   useEffect(() => {
     setProductos([...state]);
+    console.log(JSON.stringify(productos));
   }, [state]);
 
     return (
@@ -28,8 +56,8 @@ export default function Home() {
           <CartCard
             key={index}
             id={`${productos[index].id}`}
-            name={`${productos[index].name}`} 
-            price={`$${productos[index].price}`}
+            name={`${productos[index].title}`} 
+            price={productos[index].unit_price}
             imageSrc ="/headphones.webp"
             cantidad={productos[index].quantity}
           />
@@ -38,7 +66,7 @@ export default function Home() {
         </div>
 
         <div className="flex justify-center mb-[20%]">
-          <Wallet initialization={{preferenceId: 'id_preferencia'}} />
+          <Wallet initialization={{preferenceId: idPreferencia}} />
         </div>
       </main>
     );

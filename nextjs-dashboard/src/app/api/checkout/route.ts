@@ -3,12 +3,14 @@ export async function POST(req: Request, res:any){
   try{
     let items = await new Response(req.body).text();
     console.log("Items: "+items)
+    const access_token = process.env.ACCESS_TOKEN_MP;
+    const authorization= 'Bearer '+access_token+''
    
     const response = await fetch(`https://api.mercadopago.com/checkout/preferences`,{
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer APP_USR-1502233372912133-062115-a7b332adf287f355466565f8f88abac2-1521091531'
+        'Authorization': authorization
       },
       body: items
     })
