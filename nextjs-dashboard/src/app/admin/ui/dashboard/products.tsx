@@ -1,6 +1,7 @@
 import { ProductWithCategory, fetchAllProducts } from '@/app/lib/data';
 import React from 'react';
 import '@/app/admin/ui/style.css';
+import { DeleteProduct } from './buttons';
 
 export default async function ProductList() {
     const products = await fetchAllProducts();
@@ -27,12 +28,15 @@ function Card({ title, product }: { title: string; product: ProductWithCategory 
 }
 
 function ProductCard({ product }: { product: ProductWithCategory }) {
+    console.log(product.id);
     return (
         <div>
             <p>Description: {product.description}</p>
             <p>Price: ${product.price}</p>
             <p>Category ID: {product.category_name}</p>
             <img src={product.image_url} alt={product.name} className="product-image" />
+            <DeleteProduct id ={product.id} />
         </div>
+        
     );
 }
