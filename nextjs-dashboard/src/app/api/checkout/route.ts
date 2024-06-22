@@ -1,73 +1,37 @@
-import { error } from 'console';
-import { MercadoPagoConfig, Preference } from 'mercadopago';
+export async function POST(req: Request, res:any){ 
 
-export async function POST(req: any, res:any){ 
-
-  function crearPreferenciaDemo(){
-
-    const client = new MercadoPagoConfig({ accessToken: 'APP_USR-1502233372912133-062115-a7b332adf287f355466565f8f88abac2-1521091531' });
-    const preference = new Preference(client);
-
-    return preference.create({
-      body: {
-        "items": [
-        {
-          id: '123',
-          title: 'Mi producto',
-          quantity: 1,
-          unit_price: 2000
-        }
-    ]
-      }
-    })
-    .then(console.log)
-    .catch(console.log);
-  }
-
-  function crearPreferencia(items: []){
-
-    const client = new MercadoPagoConfig({ accessToken: 'APP_USR-1502233372912133-062115-a7b332adf287f355466565f8f88abac2-1521091531' });
-    const preference = new Preference(client);
-
-    return preference.create({
-      body: {
-        items: items
-      }
-    })
-    .then(console.log)
-    .catch(console.log);
-  }
-  
-  let preferencia = crearPreferenciaDemo();
   try{
-    const {items} = req.body;
-    //let preferencia = crearPreferencia(items);
-    
-    
-    const response = await fetch("https://api.mercadopago.com/checkout/preferences",{
+    let items = await new Response(req.body).text();
+    console.log("Items: "+items)
+   
+    const response = await fetch(`https://api.mercadopago.com/checkout/preferences`,{
       method: 'POST',
-      body: JSON.stringify(preferencia)
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer APP_USR-1502233372912133-062115-a7b332adf287f355466565f8f88abac2-1521091531'
+      },
+      body: items
     })
-    if(response.body){
-      res.status(200).json({ body: response.body });
+
+    const responseData = await response.json();
+
+    if(response.status==201){
+      return new Response(JSON.stringify(responseData), {
+        headers: { 'Content-Type': 'application/json' },
+        status: 201
+      });
     }
     else{
-      return new Response(JSON.stringify({ error: 'Error :'+response.body}), {
+      return new Response(JSON.stringify({ error: 'Error : Solicitud invalida'}), {
         headers: { 'Content-Type': 'application/json' },
         status: 500,
       });
-
-    
-      
-  
+    }
   }
-}
   catch(error){
-    return new Response(JSON.stringify({ error: 'Error :'+JSON.stringify(preferencia)}), {
+    return new Response(JSON.stringify({ error: 'Error : Solicitud invalida'}), {
       headers: { 'Content-Type': 'application/json' },
       status: 500,
     });
-    
-
   }
 }
