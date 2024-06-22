@@ -35,7 +35,7 @@ function ProductCard({ product }: { product: ProductWithCategory }) {
             <p>Price: ${product.price}</p>
             <p>Category ID: {product.category_name}</p>
             <img src={product.image_url} alt={product.name} className="product-image" />
-            <DeleteProduct id ={product.id} />
+            
         </div>
         
     );
