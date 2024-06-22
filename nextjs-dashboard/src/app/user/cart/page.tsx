@@ -8,7 +8,7 @@ export default function Home() {
   
   const { state } = useAppContext();
   const [productos,setProductos] = useState<ProductoEnCarrito[]>([]);
-  const [idPreferencia,setIdPreferencia] = useState<string>("");
+  const [idPreferencia, setIdPreferencia] = useState<string>("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,12 +20,12 @@ export default function Home() {
         const response = await fetch("/api/checkout",{
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer APP_USR-1502233372912133-062115-a7b332adf287f355466565f8f88abac2-1521091531'
+            'Content-Type': 'application/json'
           },
           body: items
         });
         const preferencia = await response.json();
+        setIdPreferencia(preferencia.id)
         console.log(preferencia);
         
       } catch (error) {
