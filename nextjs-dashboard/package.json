@@ -10,7 +10,6 @@
     "seed": "node -r dotenv/config ./scripts/seed.js"
   },
   "dependencies": {
-    "@heroicons/react": "^2.1.4",
     "@mercadopago/sdk-react": "^0.0.19",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.13",
@@ -31,7 +30,6 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
