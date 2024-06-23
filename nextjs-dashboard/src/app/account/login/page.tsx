@@ -5,6 +5,7 @@ import { authenticate } from "@/app/lib/actions";
 import { ArrowRightIcon, ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { useFormState, useFormStatus } from "react-dom";
 import { LoginButton } from "./components/login_button";
+import { redirect } from "next/navigation";
 
 export default function Home() {
   const [errorMessage, formAction] = useFormState(
@@ -69,6 +70,7 @@ export default function Home() {
 
 function Login() {
   const { pending } = useFormStatus();
+  
 
   return (
     <LoginButton className="mt-4 w-full" aria-disabled={pending}>

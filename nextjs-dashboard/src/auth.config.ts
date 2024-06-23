@@ -9,17 +9,23 @@ export const authConfig = {
     async authorized({ request: NextRequest , auth }) {
       const isLoggedIn = !!auth?.user;
       let userRole = "";   
+      let userEmail= "";
       const isOnDashboard = NextRequest.nextUrl.pathname.startsWith('/admin/dashboard');
       const isOnUser = NextRequest.nextUrl.pathname.startsWith('/user');
 
       if(isLoggedIn){
-        console.log("Logged");
+        if(auth?.user!=null){
+          userEmail=""+auth?.user.email;
+          userRole=await getUserRole(userEmail);
+        }
+       
+        console.log("Logged: "+userRole);
       }else{
         console.log("Not logged");
       }
 
       if(isOnDashboard){
-        if(isLoggedIn && userRole.localeCompare("admin")){
+        if(isLoggedIn && userRole=="admin"){
           return true;
         }
         else{
@@ -27,9 +33,23 @@ export const authConfig = {
         }
       }
 
-      if(!isOnDashboard && isLoggedIn && userRole.localeCompare("admin")){
+      if(!isOnDashboard && isLoggedIn && userRole=="admin"){
+        console.log("Redirect admin");
         return Response.redirect(new URL('/admin/dashboard', NextRequest.nextUrl));
       }
+
+      if(isLoggedIn){
+        if(userRole=="user"){
+          if(!isOnUser){
+            return Response.redirect(new URL('/user', NextRequest.nextUrl));
+          }
+        }
+      }
+    
+      return true;
+
+      
+      
 
       if(isLoggedIn && userRole.localeCompare("user") && !isOnUser){
         return Response.redirect(new URL('/user', NextRequest.nextUrl));
@@ -37,18 +57,8 @@ export const authConfig = {
       else{
         return true;
       }
-      /*
-      if (isOnDashboard) {
-        if (isLoggedIn && userRole==="admin") return true;
-        return false; // Redirect unauthenticated users to login page
-      }else if (isLoggedIn && userRole==="user") {
-        console.log("Loged in");
-        return Response.redirect(new URL('/user', NextRequest.nextUrl));
-      }else{
-        console.log("Not logged in");
-      }
-      return true;
-      */
+      
+      
     },
   },
   
