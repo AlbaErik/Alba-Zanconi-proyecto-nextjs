@@ -63,8 +63,6 @@ const orders = [
 
 ];
 
-
-
 module.exports = {
     users,
     categories,

@@ -1,9 +1,19 @@
-import React from 'react';
+import clsx from 'clsx';
 
-const LoginButton: React.FC = () => {
-  return (
-    <button className="inline-block align-middle w-5/6 sm:w-4/6 md:w-1/2 lg:w-1/3 mt-5 text-center text-white hover:bg-blue-900 bg-blue-700 rounded-lg h-12">Ingresar</button>
-  );
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
 }
 
-export default LoginButton;
+export function LoginButton({ children, className, ...rest }: ButtonProps) {
+  return (
+    <button
+      {...rest}
+      className={clsx(
+        'flex h-10 items-center rounded-lg bg-blue-500 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 active:bg-blue-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-50',
+        className,
+      )}
+    >
+      {children}
+    </button>
+  );
+}

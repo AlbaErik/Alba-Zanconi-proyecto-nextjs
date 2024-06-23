@@ -1,11 +1,13 @@
-import { useActionState } from "react";
-import LoginButton from "./components/login_button";
+"use client";
+
 import RegisterButton from "./components/register_button";
 import { authenticate } from "@/app/lib/actions";
-import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
+import { ArrowRightIcon, ExclamationCircleIcon } from "@heroicons/react/24/outline";
+import { useFormState, useFormStatus } from "react-dom";
+import { LoginButton } from "./components/login_button";
 
 export default function Home() {
-  const [errorMessage, formAction, isPending] = useActionState(
+  const [errorMessage, formAction] = useFormState(
     authenticate,
     undefined,
   );
@@ -32,11 +34,12 @@ export default function Home() {
             <div className="">
               <label  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white pt-3">Contraseña</label>
               <input className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-              placeholder="Ingrese su Contraseña" 
                 id="password"
                 type="password"
                 name="password"
-                required />
+                placeholder="Ingrese su Contraseña" 
+                required 
+                />
             </div>
             <div
               className="flex h-8 items-end space-x-1"
@@ -51,7 +54,7 @@ export default function Home() {
               )}
             </div>
             <div className="flex justify-center">
-              <LoginButton/>
+              <Login/>
             </div>
             <div className="flex justify-center pt-5">
               <RegisterButton/>
@@ -65,4 +68,15 @@ export default function Home() {
       </form>
     </main>
   );
+}
+
+function Login() {
+  const { pending } = useFormStatus();
+
+  return (
+    <LoginButton className="mt-4 w-full" aria-disabled={pending}>
+      Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
+    </LoginButton>
+  );
+
 }
