@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import ProductCard from "./components/product_card"
 import { ProductWithCategory } from '../lib/data';
 import ReactPaginate from 'react-paginate';
@@ -99,35 +99,38 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between pt-[3%] pl-[10%] pr-[10%]">
-      <div id="productos" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full">
-      {
-        
-        productosMostrados.map((_, index) => (
-          <ProductCard 
-            key={index}
-            name={`${productosMostrados[index].name}`} 
-            price={productosMostrados[index].price}
-            id={`${productosMostrados[index].id}`}
-            imageSrc ="/headphones.webp"
-            description={`${productosMostrados[index].description}`} 
-            category_name={`${productosMostrados[index].category_name}`} 
-          />
-        ))     
-      }
+      <Suspense fallback={<div>Loading...</div>}>
+        <div id="productos" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full">
+        {
+          
+          productosMostrados.map((_, index) => (
+            <ProductCard 
+              key={index}
+              name={`${productosMostrados[index].name}`} 
+              price={productosMostrados[index].price}
+              id={`${productosMostrados[index].id}`}
+              imageSrc ="/headphones.webp"
+              description={`${productosMostrados[index].description}`} 
+              category_name={`${productosMostrados[index].category_name}`} 
+            />
+          ))     
+        }
 
-      </div>
-      <ReactPaginate className="flex gap-5 mb-10 pt-5"
-        previousLabel={null}
-        nextLabel={null}
-        breakLabel={'...'}
-        pageCount={cantPaginas}
-        marginPagesDisplayed={2}
-        pageRangeDisplayed={5}
-        onPageChange={handlePageClick}
-        containerClassName={''}
-        activeClassName={'text-blue-500'}
-        pageClassName={'hover:underline'}
-      />
+        </div>
+        <ReactPaginate className="flex gap-5 mb-10 pt-5"
+          previousLabel={null}
+          nextLabel={null}
+          breakLabel={'...'}
+          pageCount={cantPaginas}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlePageClick}
+          containerClassName={''}
+          activeClassName={'text-blue-500'}
+          pageClassName={'hover:underline'}
+        />
+      </Suspense>
+      
     </main>
   );
 }
