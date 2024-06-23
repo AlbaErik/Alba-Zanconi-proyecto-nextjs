@@ -38,7 +38,8 @@ export default function Home() {
                 type="password"
                 name="password"
                 placeholder="Ingrese su Contraseña" 
-                required 
+                required
+                minLength={4}
                 />
             </div>
             <div
