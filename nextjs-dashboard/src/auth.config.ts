@@ -3,7 +3,7 @@ import { getUserRole } from './app/lib/data';
  
 export const authConfig = {
   pages: {
-    signIn: '/account/login',
+    signIn: '/',
   },
   callbacks: {
     async authorized({ request: NextRequest , auth }) {
@@ -25,6 +25,10 @@ export const authConfig = {
         else{
           return false  // Redirect unauthenticated users to login page
         }
+      }
+
+      if(!isOnDashboard && isLoggedIn && userRole.localeCompare("admin")){
+        return Response.redirect(new URL('/admin/dashboard', NextRequest.nextUrl));
       }
 
       if(isLoggedIn && userRole.localeCompare("user") && !isOnUser){

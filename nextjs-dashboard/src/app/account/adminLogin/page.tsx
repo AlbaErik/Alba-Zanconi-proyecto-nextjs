@@ -1,6 +1,4 @@
 "use client";
-
-import RegisterButton from "./components/register_button";
 import { authenticate } from "@/app/lib/actions";
 import { ArrowRightIcon, ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { useFormState, useFormStatus } from "react-dom";
@@ -17,7 +15,7 @@ export default function Home() {
       <form action={formAction} className="space-y-3">
         <div className="flex justify-center pt-5">
           <label className="text-4xl">
-            Iniciar Sesion como Usuario
+            Iniciar Sesion como admin
           </label>
         </div>
         <div className="flex justify-center w-full">
@@ -56,9 +54,6 @@ export default function Home() {
             </div>
             <div className="flex justify-center">
               <Login/>
-            </div>
-            <div className="flex justify-center pt-5">
-              <RegisterButton/>
             </div>
           </div>
         </div>
