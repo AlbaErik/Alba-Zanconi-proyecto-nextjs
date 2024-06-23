@@ -9,6 +9,7 @@ export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [Credentials({
       async authorize(credentials) {
+        console.log("singout");
           const parsedCredentials = z
               .object({ email: z.string().email(), password: z.string().min(4) })
               .safeParse(credentials);

@@ -226,6 +226,17 @@ export async function fetchAllOrders(): Promise<Order[]> {
     }
 }
 
+export async function getUserRole(email: string): Promise<string> {
+    noStore();
+    try {
+        const user = await sql`SELECT * FROM store.users WHERE email=${email}`;
+        return user.rows[0].role;
+    } catch (error) {
+        console.error('Failed to fetch user:', error);
+        throw new Error('Failed to fetch user.');
+    }
+}
+
 export async function getUser(email: string) {
     noStore();
     try {
