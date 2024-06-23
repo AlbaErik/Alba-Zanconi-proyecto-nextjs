@@ -60,12 +60,8 @@ export default function Home() {
             <div className="flex justify-center pt-5">
               <RegisterButton/>
             </div>
-            
           </div>
-          
-          
         </div>
-        
       </form>
     </main>
   );
