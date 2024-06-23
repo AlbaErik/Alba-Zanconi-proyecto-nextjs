@@ -15,6 +15,7 @@
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.13",
     "@vercel/postgres": "^0.8.0",
+    "auth": "^1.0.2",
     "bcrypt": "^5.1.1",
     "cloudinary": "^2.2.0",
     "clsx": "^2.1.1",
@@ -32,6 +33,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
