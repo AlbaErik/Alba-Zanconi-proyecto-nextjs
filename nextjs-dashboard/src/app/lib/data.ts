@@ -28,6 +28,29 @@ export async function fetchAllUsers(): Promise<User[]> {
     }
 }
 
+export type CategoryField = {
+    id: string;
+    name: string;
+};
+
+
+export async function fetchFullCategory(): Promise<string[]> {
+    try {
+        const result = await sql`
+          SELECT
+            name
+          FROM store.categories
+          ORDER BY name ASC
+        `;
+        const categories = result.rows.map(row => row.name);
+        return categories;
+    } catch (err) {
+        console.error('Database Error:', err);
+        throw new Error('Failed to fetch all categories.');
+    }
+}
+
+
 export async function fetchAllCategories(): Promise<string[]> {
     noStore();
     try {
@@ -117,6 +140,26 @@ export async function fetchProductById(productId: string): Promise<ProductWithCa
     } catch (err) {
         console.error('Database Error:', err);
         throw new Error('Failed to fetch product by ID.');
+    }
+}
+
+export async function fetchCategoryByName(categoryName: string): Promise<string> {
+    noStore();
+    try {
+        const data = await sql`
+        SELECT 
+          categories.id
+        FROM store.categories
+        WHERE categories.name = ${categoryName}
+      `;
+        if (data.rows.length > 0) {
+            return data.rows[0].id;
+        } else {
+            throw new Error(`Category with ID ${categoryName} not found.`);
+        }
+    } catch (err) {
+        console.error('Database Error:', err);
+        throw new Error('Failed to fetch category by ID.');
     }
 }
 
