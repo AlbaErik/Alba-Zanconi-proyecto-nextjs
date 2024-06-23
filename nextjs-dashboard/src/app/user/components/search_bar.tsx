@@ -1,11 +1,16 @@
 'use client';
-import React from 'react';
+import Link from 'next/link';
+import React, { useRef } from 'react';
+import { useState } from 'react';
 
 const SearchBar: React.FC = () => {
 
-  function actualizarProductos(){
-  
-  }
+  const inputRef = useRef(null);
+  const [text,setText] =useState<string>("");
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setText(event.target.value); // Actualiza el estado `text` con el valor del input
+  };
 
   return (
     <div className="w-full">   
@@ -16,8 +21,8 @@ const SearchBar: React.FC = () => {
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
               </svg>
           </div>
-          <input id="default-search" className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar" required />
-          <button onClick={actualizarProductos} className="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+          <input ref={inputRef} value={text} onChange={handleInputChange} id="default-search" className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar" required />
+          <Link href={`/user?search=${encodeURIComponent(text)}`} className="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</Link>
         </div>
     </div>
   );

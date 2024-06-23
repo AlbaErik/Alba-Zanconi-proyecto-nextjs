@@ -3,9 +3,11 @@ import React, { useState, useEffect } from 'react';
 import ProductCard from "./components/product_card"
 import { ProductWithCategory } from '../lib/data';
 import ReactPaginate from 'react-paginate';
+import { useSearchParams  } from 'next/navigation';
 
 export default function Home() {
 
+  const searchParams  = useSearchParams();
   const handlePageClick = (data: {selected: number})  => {
     setPaginaActual(data.selected+1);
   }
@@ -15,12 +17,47 @@ export default function Home() {
   const [paginaActual,setPaginaActual] = useState<number>(1);
   const [productosMostrados,setProductosMostrados] = useState<ProductWithCategory[]>([]);
   const [productos,setProductos] = useState<ProductWithCategory[]>([]);
+  const [searchText,setSearchText] = useState<string>("");
 
   useEffect(() => {
+  
+    if(searchParams.get('search')){
+      setSearchText(""+searchParams.get('search'));
+    }
+    else{
+      setSearchText("");
+    }
+
+  }, [searchParams]);
+
+  useEffect(() => {
+    const fetchFilterData = async () => {
+      try {
+        const response = await fetch("/api/products");
+        const data: ProductWithCategory[] = await response.json();
+
+        if(data.length>0){
+          let productosFiltrados: ProductWithCategory[] = [];
+          productosFiltrados = data.filter(producto => producto.name.includes(searchText));
+          if(productosFiltrados.length===0){
+            setCantPaginas(Math.ceil(data.length/CANTIDAD_PRODUCTOS_MOSTRADOS));
+            setProductos(data);
+          }
+          else{
+            setCantPaginas(Math.ceil(productosFiltrados.length/CANTIDAD_PRODUCTOS_MOSTRADOS));
+            setProductos(productosFiltrados);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
     const fetchData = async () => {
       try {
         const response = await fetch("/api/products");
         const data = await response.json();
+
         if(data.length>0){
           setCantPaginas(Math.ceil(data.length/CANTIDAD_PRODUCTOS_MOSTRADOS));
           setProductos(data);
@@ -31,8 +68,21 @@ export default function Home() {
       }
     };
 
-    fetchData();
-  }, []);
+
+    if(searchText!=""){
+      fetchFilterData();
+      const productosFiltrados = productos.filter(producto =>
+        producto.name.includes(searchText)
+      );
+      setProductos(productosFiltrados);
+    }
+    else{
+      fetchData();
+    }
+
+    handlePageClick({selected:0});
+    
+  }, [searchText]);
 
   //Use effect utilizado para mostrar las product cards correspondientes al numero de pagina en cuestion
   useEffect(() => {
@@ -50,17 +100,21 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between pt-[3%] pl-[10%] pr-[10%]">
       <div id="productos" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full">
-      {productosMostrados.map((_, index) => (
-        <ProductCard 
-          key={index}
-          name={`${productosMostrados[index].name}`} 
-          price={productosMostrados[index].price}
-          id={`${productosMostrados[index].id}`}
-          imageSrc ="/headphones.webp"
-          description={`${productosMostrados[index].description}`} 
-          category_name={`${productosMostrados[index].category_name}`} 
-        />
-      ))}
+      {
+        
+        productosMostrados.map((_, index) => (
+          <ProductCard 
+            key={index}
+            name={`${productosMostrados[index].name}`} 
+            price={productosMostrados[index].price}
+            id={`${productosMostrados[index].id}`}
+            imageSrc ="/headphones.webp"
+            description={`${productosMostrados[index].description}`} 
+            category_name={`${productosMostrados[index].category_name}`} 
+          />
+        ))     
+      }
+
       </div>
       <ReactPaginate className="flex gap-5 mb-10 pt-5"
         previousLabel={null}
