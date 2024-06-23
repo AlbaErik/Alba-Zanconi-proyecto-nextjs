@@ -3,6 +3,7 @@ import NavigationBar from "./components/navigation_bar"
 import LoginButton from "./components/login_button"
 import SearchBar from "./components/search_bar"
 import CartButton from "./components/cart_button";
+import { Suspense } from "react";
 
 export default function RootLayout({
   children,
@@ -42,8 +43,10 @@ export default function RootLayout({
           </div>
 
         </div>
-
-        {children}
+        <Suspense>
+          {children}
+        </Suspense>
+        
 
       </body>
     </html>
