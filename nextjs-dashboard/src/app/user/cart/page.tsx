@@ -9,8 +9,9 @@ export default function Home() {
   const { state } = useAppContext();
   const [productos,setProductos] = useState<ProductoEnCarrito[]>([]);
   const [idPreferencia, setIdPreferencia] = useState<string>("");
-  const [reenderizando, setReenderizando] = useState<boolean>(false);
+  const [confirmarCarritoState, setConfirmarCarritoState] = useState<boolean>(false);
 
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -31,20 +32,33 @@ export default function Home() {
       }
     };
     
-    fetchData(); 
-  },[state]);
+    if(confirmarCarritoState){
+      fetchData();
+      setConfirmarCarritoState(false)
+    }
+    
+  },[confirmarCarritoState]);
 
   useEffect(() => {
-    if(!reenderizando){
-      setReenderizando(true);
-      setProductos(state);
-      initMercadoPago('APP_USR-cf082da5-a989-4d78-8c11-9b80f90da071', { locale: 'es-AR' });
-    }
+  
+    setProductos(state);
+    initMercadoPago('APP_USR-cf082da5-a989-4d78-8c11-9b80f90da071', { locale: 'es-AR' });
+    
   },[]);
 
   useEffect(() => {
     setProductos([...state]);
   }, [state]);
+
+  const confirmarCarrito = async () => {
+    if(productos.length!=0){
+      setConfirmarCarritoState(true);
+    }
+    else{
+      setIdPreferencia("");
+    }
+    
+  };
 
     return (
       <main className="pt-[1%]">
@@ -63,8 +77,16 @@ export default function Home() {
           />
           ))}
         </div>
+        <div className="flex justify-center">
+          <button onClick={confirmarCarrito} className="px-[2%] text-white hover:bg-blue-900 bg-blue-700 rounded-lg h-12">
+            Confirmar Carrito
+          </button>
+
+        </div>
         <div className="flex justify-center mb-[20%]">
-          <Wallet initialization={{preferenceId: idPreferencia}} />
+          <Wallet 
+            initialization={{preferenceId: idPreferencia}} 
+          />
         </div>
       </main>
     );

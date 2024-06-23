@@ -51,7 +51,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between pt-[3%] pl-[10%] pr-[10%]">
       <div id="productos" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full">
-      {productos.map((_, index) => (
+      {productosMostrados.map((_, index) => (
         <ProductCard 
           key={index}
           name={`${productos[index].name}`} 
