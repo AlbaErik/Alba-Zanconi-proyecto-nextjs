@@ -1,3 +1,4 @@
+"use client";
 import RegisterButton from "./components/register_button";
 import { authenticate } from "@/app/lib/actions";
 import { ArrowRightIcon, ExclamationCircleIcon } from "@heroicons/react/24/outline";

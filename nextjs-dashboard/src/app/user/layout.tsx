@@ -1,4 +1,4 @@
-"use client";
+
 import Image from "next/image";
 import NavigationBar from "./components/navigation_bar"
 import LoginButton from "./components/login_button"
