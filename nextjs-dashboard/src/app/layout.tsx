@@ -10,7 +10,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="min-h-screen pt-[1%]">
         <AppWrapper>
-          {children}
+            {children}
         </AppWrapper>  
       </body>
     </html>

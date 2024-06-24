@@ -1,4 +1,4 @@
-
+"use client";
 import Image from "next/image";
 import NavigationBar from "./components/navigation_bar"
 import LoginButton from "./components/login_button"
@@ -6,12 +6,14 @@ import SearchBar from "./components/search_bar"
 import CartButton from "./components/cart_button";
 import { Suspense } from "react";
 import SignOutButton from "./components/sign_out_button";
-
+ 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  
 
   return (
     <html lang="en">
@@ -31,10 +33,13 @@ export default function RootLayout({
             </div>
             <SearchBar/>
             <div className="mx-4">
-
+                 
                   <LoginButton/>
-                  
+                
                   <SignOutButton/>
+
+                  
+   
             </div>
 
             <div className="h-10">
@@ -54,3 +59,7 @@ export default function RootLayout({
     </html>
   );
 }
+function getServerSession(authOptions: any) {
+  throw new Error("Function not implemented.");
+}
+
