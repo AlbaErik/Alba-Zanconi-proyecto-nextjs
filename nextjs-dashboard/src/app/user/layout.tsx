@@ -1,4 +1,3 @@
-
 import Image from "next/image";
 import NavigationBar from "./components/navigation_bar"
 import LoginButton from "./components/login_button"
@@ -6,14 +5,15 @@ import SearchBar from "./components/search_bar"
 import CartButton from "./components/cart_button";
 import { Suspense } from "react";
 import SignOutButton from "./components/sign_out_button";
- 
-export default function RootLayout({
-  children,
+import { SessionProvider } from "next-auth/react"
+import { auth } from "@/auth";
+
+export default async function RootLayout({
+  children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-  
+  const session = await auth();
 
   return (
     <html lang="en">
@@ -33,13 +33,11 @@ export default function RootLayout({
             </div>
             <SearchBar/>
             <div className="mx-4">
-                 
-                  <LoginButton/>
+                <SessionProvider session={session}>
+                  <LoginButton session={session}/>
                 
-                  <SignOutButton/>
-
-                  
-   
+                  <SignOutButton session={session}/>
+                </SessionProvider>
             </div>
 
             <div className="h-10">
@@ -53,13 +51,9 @@ export default function RootLayout({
 
         </div>
         <Suspense>
-          {children}
+           {children}
         </Suspense>
       </body>
     </html>
   );
 }
-function getServerSession(authOptions: any) {
-  throw new Error("Function not implemented.");
-}
-
