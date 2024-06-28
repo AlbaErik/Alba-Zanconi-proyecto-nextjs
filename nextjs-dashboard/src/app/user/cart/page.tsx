@@ -36,6 +36,11 @@ export default function Home() {
     close();
   }
 
+  const onClose = () => {
+    setModalOpen(false);
+    close();
+  }
+
   function comprar(){
     
     const fetchData = async () => {
@@ -82,7 +87,7 @@ export default function Home() {
             Comprar
           </button>
         </div>
-        <Popup open={modalOpen} modal nested className="" >
+        <Popup onClose={onClose} open={modalOpen} modal nested className="" >
           {
             (close: () => void) => (
                 <div className="" style={{ border: '3px  black rounded-lg' }}>

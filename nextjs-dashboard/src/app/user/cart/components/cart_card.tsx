@@ -38,9 +38,7 @@ const CartCard: React.FC<CardProps> = ({ id, name, price, imageSrc, cantidad, se
       let elimine = false;
       while(!encontre){
         if(productos[i].id===id){
-          
           if(productos[i].quantity===1){
-            console.log("Remove product");
             setIndiceProductoAEliminar(i);
             setModalOpen(true);
           }
