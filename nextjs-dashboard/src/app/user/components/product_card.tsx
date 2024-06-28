@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useState } from 'react';
 import Image from "next/image";
 import Link from 'next/link';
@@ -17,56 +16,37 @@ interface CardProps {
 const ProductCard: React.FC<CardProps> = ({ name, price, id, imageSrc, description, category_name, onButtonClick}) => {
 
   const { state, setState } = useAppContext();
-  const [executeEffect, setExecuteEffect] = useState(false);
 
   const handleButtonCLick = () => {
-    setExecuteEffect(true);
+    agregarProducto();
     onButtonClick();
   }
 
-  function buscarProductoEnCarrito(): number{
-    let indice = 0;
-    let i = 0;
-    while(indice === 0 && i<state.length){
-      if(state[i].id===id){
-        indice = i;
+  function agregarProducto(){
+    let productos = [...state];
+    let i=0;
+    let encontre = false;
+    while(!encontre && i<productos.length){
+      if(productos[i].id===id){
+        productos[i].quantity=productos[i].quantity+1;
+        encontre = true;
       }
-      else{
-        i++
-      }
+      i++;
     }
-    return indice;
+    if(!encontre){
+      let producto: ProductoEnCarrito  = {
+        id: id,
+        title: name,
+        description: description,
+        unit_price: +price,
+        picture_url: imageSrc,
+        category_id: category_name,
+        quantity: 1
+      }
+      productos.push(producto);
+    }
+    setState(productos);
   }
-
-  useEffect(() => {
-    const agregarProducto = async () => {
-      if(executeEffect){
-        let productos: ProductoEnCarrito[] = [...state];
-        let indice = buscarProductoEnCarrito();
-        
-        //Se ejecuta cuando el indice es distinto de 0 (El producto estaba en el carrito)
-        if(indice){
-          productos[indice].quantity=productos[indice].quantity+1;
-        }
-        else{
-          let producto: ProductoEnCarrito  = {
-            id: id,
-            title: name,
-            description: description,
-            unit_price: +price,
-            picture_url: imageSrc,
-            category_id: category_name,
-            quantity: 1
-          }
-          productos.push(producto);
-        }
-        setState(productos);
-        setExecuteEffect(false);
-      }
-    }
-    agregarProducto();
-
-  }, [executeEffect]);
   
   return (
     <div className="card rounded-lg bg-white shadow-md">
