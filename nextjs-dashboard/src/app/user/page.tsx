@@ -59,10 +59,11 @@ export default function Home() {
           if(productosFiltrados.length===0){
             setCantPaginas(Math.ceil(data.length/CANTIDAD_PRODUCTOS_MOSTRADOS));
             setProductos(data);
+            toast("No se encontraron productos en la busqueda");
           }
           else{
             setCantPaginas(Math.ceil(productosFiltrados.length/CANTIDAD_PRODUCTOS_MOSTRADOS));
-            setProductos(productosFiltrados);
+            setProductos(productosFiltrados);   
           }
         }
       } catch (error) {
@@ -91,6 +92,7 @@ export default function Home() {
       const productosFiltrados = productos.filter(producto =>
         producto.name.includes(searchText)
       );
+      console.log("Cantidad Productos Filtrados: "+productosFiltrados.length);
       setProductos(productosFiltrados);
     }
     else{
@@ -112,16 +114,17 @@ export default function Home() {
       }  
       setProductosMostrados(newProducts);
     }
+    else{
+
+    }
   }, [productos, paginaActual]);
 
   return (
     
-    <main className="flex min-h-screen flex-col items-center justify-between pt-[3%] pl-[10%] pr-[10%] mb-[5%]">
-       
+    <main className="flex min-h-screen flex-col items-center justify-between pt-[3%] pl-[10%] pr-[10%]">
       <div className="w-full">
         <div id="productos" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full">
         {
-          
           productosMostrados.map((_, index) => (
             <ProductCard 
               key={index}
@@ -136,10 +139,9 @@ export default function Home() {
           ))     
         }
         </div>
-        
       </div>
       
-      <ReactPaginate className="flex gap-5 mb-10 pt-5"
+      <ReactPaginate className="flex gap-5 mb-5 pt-5"
         previousLabel={null}
         nextLabel={null}
         breakLabel={'...'}
@@ -155,7 +157,7 @@ export default function Home() {
         theme="dark"
         position="bottom-right"
         closeOnClick
-        autoClose={2000}
+        autoClose={3000}
         pauseOnHover={false}
       />
     </main>
