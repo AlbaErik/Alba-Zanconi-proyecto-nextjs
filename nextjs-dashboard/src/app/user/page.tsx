@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import ProductCard from "./components/product_card"
-import 'react-notifications-component/dist/theme.css'
 import { ProductWithCategory } from '../lib/data';
 import ReactPaginate from 'react-paginate';
 import { useSearchParams  } from 'next/navigation';
