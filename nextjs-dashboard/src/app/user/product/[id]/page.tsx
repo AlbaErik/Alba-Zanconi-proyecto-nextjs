@@ -5,9 +5,12 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from "react";
 import { ProductoEnCarrito, useAppContext } from "@/app/context";
 import { ProductWithCategory } from "@/app/lib/data";
+import { ToastContainer, toast} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function Home() {
   const params = useParams();
+  const [productoAgregado,setProductoAgregado] = useState<boolean>();
   const [name,setName] = useState<string>("");
   const [description,setDescription] = useState<string>("");
   const [price,setPrice] = useState<string>("");
@@ -22,10 +25,24 @@ export default function Home() {
 
   const agregarProductoCarrito = () => {
     setExecuteEffect(true);
+    setProductoAgregado(true);
   };
 
   const { state, setState } = useAppContext();
   const [executeEffect, setExecuteEffect] = useState(false);
+
+  const handleClick = () => {
+    setProductoAgregado(true);
+  };
+
+  useEffect(() => {
+    
+    if(productoAgregado){
+      toast("Producto agregado a carrito exitosamente");
+      setProductoAgregado(false);
+    }
+
+  }, [productoAgregado]);
 
   function buscarProductoEnCarrito(): number{
     let indice = 0;
@@ -113,6 +130,13 @@ export default function Home() {
             </div>
           </div>
       </div>
+      <ToastContainer
+        theme="dark"
+        position="bottom-right"
+        closeOnClick
+        autoClose={2000}
+        pauseOnHover={false}
+      />
     </main>
   );
 }

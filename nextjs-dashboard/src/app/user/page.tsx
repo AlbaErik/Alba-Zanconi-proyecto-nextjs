@@ -1,9 +1,12 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import ProductCard from "./components/product_card"
+import 'react-notifications-component/dist/theme.css'
 import { ProductWithCategory } from '../lib/data';
 import ReactPaginate from 'react-paginate';
 import { useSearchParams  } from 'next/navigation';
+import { ToastContainer, toast} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function Home() {
 
@@ -18,6 +21,21 @@ export default function Home() {
   const [productosMostrados,setProductosMostrados] = useState<ProductWithCategory[]>([]);
   const [productos,setProductos] = useState<ProductWithCategory[]>([]);
   const [searchText,setSearchText] = useState<string>("");
+  const [productoAgregado, setProductoAgregado] = useState<boolean>();
+
+  const handleClick = () => {
+    setProductoAgregado(true);
+  };
+
+  useEffect(() => {
+    if(productoAgregado){
+  
+      toast("Producto agregado a carrito exitosamente");
+    
+      setProductoAgregado(false);
+    }
+
+  }, [productoAgregado]);
 
   useEffect(() => {
   
@@ -98,24 +116,30 @@ export default function Home() {
   }, [productos, paginaActual]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between pt-[3%] pl-[10%] pr-[10%]">
-      <div id="productos" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full">
-      {
+    
+    <main className="flex min-h-screen flex-col items-center justify-between pt-[3%] pl-[10%] pr-[10%] mb-[5%]">
+       
+      <div className="w-full">
+        <div id="productos" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full">
+        {
+          
+          productosMostrados.map((_, index) => (
+            <ProductCard 
+              key={index}
+              name={`${productosMostrados[index].name}`} 
+              price={productosMostrados[index].price}
+              id={`${productosMostrados[index].id}`}
+              imageSrc ="/headphones.webp"
+              description={`${productosMostrados[index].description}`} 
+              category_name={`${productosMostrados[index].category_name}`}
+              onButtonClick={handleClick}
+            />
+          ))     
+        }
+        </div>
         
-        productosMostrados.map((_, index) => (
-          <ProductCard 
-            key={index}
-            name={`${productosMostrados[index].name}`} 
-            price={productosMostrados[index].price}
-            id={`${productosMostrados[index].id}`}
-            imageSrc ="/headphones.webp"
-            description={`${productosMostrados[index].description}`} 
-            category_name={`${productosMostrados[index].category_name}`} 
-          />
-        ))     
-      }
-
       </div>
+      
       <ReactPaginate className="flex gap-5 mb-10 pt-5"
         previousLabel={null}
         nextLabel={null}
@@ -128,7 +152,13 @@ export default function Home() {
         activeClassName={'text-blue-500'}
         pageClassName={'hover:underline'}
       />
-      
+      <ToastContainer
+        theme="dark"
+        position="bottom-right"
+        closeOnClick
+        autoClose={2000}
+        pauseOnHover={false}
+      />
     </main>
   );
 }

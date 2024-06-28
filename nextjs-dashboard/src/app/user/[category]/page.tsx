@@ -4,6 +4,7 @@ import ProductCard from "../components/product_card"
 import { ProductWithCategory } from '../../lib/data';
 import { useParams } from 'next/navigation';
 import ReactPaginate from 'react-paginate';
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function Home() {
   const params = useParams();
@@ -16,8 +17,22 @@ export default function Home() {
   const [cantPaginas,setCantPaginas] = useState<number>(1);
   const [paginaActual,setPaginaActual] = useState<number>(1);
   const [productosMostrados,setProductosMostrados] = useState<ProductWithCategory[]>([]);
-
   const [productos,setProductos] = useState<ProductWithCategory[]>([]);
+  const [productoAgregado, setProductoAgregado] = useState<boolean>();
+
+  const handleClick = () => {
+    setProductoAgregado(true);
+  };
+
+  useEffect(() => {
+    if(productoAgregado){
+  
+      toast("Producto agregado a carrito exitosamente");
+    
+      setProductoAgregado(false);
+    }
+
+  }, [productoAgregado]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,6 +75,7 @@ export default function Home() {
           imageSrc ="/headphones.webp"
           description={`${productos[index].description}`}
           category_name={`${productos[index].category_name}`}
+          onButtonClick={handleClick}
         />
       ))}
       </div>
@@ -74,6 +90,13 @@ export default function Home() {
         containerClassName={''}
         activeClassName={'text-blue-500'}
         pageClassName={'hover:underline'}
+      />
+      <ToastContainer
+        theme="dark"
+        position="bottom-right"
+        closeOnClick
+        autoClose={2000}
+        pauseOnHover={false}
       />
     </main>
   );

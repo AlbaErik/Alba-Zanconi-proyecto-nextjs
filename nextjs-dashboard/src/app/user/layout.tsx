@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import SignOutButton from "./components/sign_out_button";
 import { SessionProvider } from "next-auth/react"
 import { auth } from "@/auth";
+import { ReactNotifications } from "react-notifications-component";
 
 export default async function RootLayout({
   children
@@ -14,7 +15,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
-
+  
   return (
     <html lang="en">
       <body>
