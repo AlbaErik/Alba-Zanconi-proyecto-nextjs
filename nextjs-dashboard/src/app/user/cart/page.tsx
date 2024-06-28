@@ -3,6 +3,8 @@ import CartCard from "./components/cart_card";
 import { initMercadoPago, Wallet } from '@mercadopago/sdk-react'
 import { ProductoEnCarrito, useAppContext } from "@/app/context";
 import { useEffect, useState } from "react";
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 
 export default function Home() {
   
@@ -11,7 +13,6 @@ export default function Home() {
   const [idPreferencia, setIdPreferencia] = useState<string>("");
   const [confirmarCarritoState, setConfirmarCarritoState] = useState<boolean>(false);
 
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -88,6 +89,25 @@ export default function Home() {
             initialization={{preferenceId: idPreferencia}} 
           />
         </div>
+        <Popup trigger=
+                {<button> Click to open modal </button>} 
+                modal nested>
+                {
+                  (close: () => void) => (
+                      <div className='modal'>
+                          <div className='content'>
+                              Welcome to GFG!!!
+                          </div>
+                          <div>
+                              <button onClick=
+                                  {() => close()}>
+                                      Close modal
+                              </button>
+                          </div>
+                      </div>
+                  )
+                }
+            </Popup>
       </main>
     );
   }

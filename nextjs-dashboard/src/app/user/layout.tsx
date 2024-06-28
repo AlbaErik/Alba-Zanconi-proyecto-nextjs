@@ -7,7 +7,6 @@ import { Suspense } from "react";
 import SignOutButton from "./components/sign_out_button";
 import { SessionProvider } from "next-auth/react"
 import { auth } from "@/auth";
-import { ReactNotifications } from "react-notifications-component";
 
 export default async function RootLayout({
   children
