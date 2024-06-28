@@ -1,8 +1,11 @@
-export async function POST(req: Request, res:any){ 
+import { NextApiResponse } from "next";
+import { redirect } from "next/navigation";
+import { NextResponse } from "next/server";
+
+export async function POST(req: Request, res: NextResponse){ 
 
   try{
     let items = await new Response(req.body).text();
-    console.log("Items: "+items)
     const access_token = process.env.ACCESS_TOKEN_MP;
     const authorization= 'Bearer '+access_token+''
    
@@ -17,21 +20,21 @@ export async function POST(req: Request, res:any){
 
     const responseData = await response.json();
 
-    if(response.status==201){
-      return new Response(JSON.stringify(responseData), {
+    if(response.status==201 && response.body!=null){
+      return new Response(JSON.stringify(responseData.init_point), {
         headers: { 'Content-Type': 'application/json' },
         status: 201
       });
     }
     else{
-      return new Response(JSON.stringify({ error: 'Error : Solicitud invalida'}), {
+      return new Response(JSON.stringify({ error: 'Error : Pago invalido'}), {
         headers: { 'Content-Type': 'application/json' },
         status: 500,
       });
     }
   }
   catch(error){
-    return new Response(JSON.stringify({ error: 'Error : Solicitud invalida'}), {
+    return new Response(JSON.stringify({ error: 'Error : Pago invalido'}), {
       headers: { 'Content-Type': 'application/json' },
       status: 500,
     });

@@ -5,6 +5,7 @@ import { ProductWithCategory } from '../../lib/data';
 import { useParams } from 'next/navigation';
 import ReactPaginate from 'react-paginate';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function Home() {
   const params = useParams();

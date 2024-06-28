@@ -10,31 +10,8 @@ export default function Home() {
   
   const { state, setState } = useAppContext();
   const [productos,setProductos] = useState<ProductoEnCarrito[]>([]);
-  const [idPreferencia, setIdPreferencia] = useState<string>("");
   const [modalOpen,setModalOpen] =useState<boolean>(false);
   const [indiceProductoAElimninar,setIndiceProductoAEliminar] = useState<number>(0);
-
-  useEffect(() => {
-
-    const fetchData = async () => {
-      try {
-        const items = "{ items:"+JSON.stringify(productos)+" }"
-        const response = await fetch("/api/checkout",{
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: items
-        });
-        const preferencia = await response.json();
-        setIdPreferencia(preferencia.id)
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  },[productos]);
 
   useEffect(() => {
     setProductos(state);
@@ -59,6 +36,28 @@ export default function Home() {
     close();
   }
 
+  function comprar(){
+    
+    const fetchData = async () => {
+      try {
+        const items = "{ items:"+JSON.stringify(productos)+" }"
+        const response = await fetch("/api/checkout",{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: items
+        });
+        const link_mercadopago = await response.json();
+        window.location.href=""+link_mercadopago;
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }
+
     return (
       <main className="pt-[1%]">
         <div className="text-center text-5xl">
@@ -79,9 +78,9 @@ export default function Home() {
           ))}
         </div>
         <div className="flex justify-center mb-[20%]">
-          <Wallet
-            initialization={{preferenceId: idPreferencia}} 
-          />
+          <button onClick={comprar}className="inline-block align-middle w-5/6 sm:w-4/6 md:w-1/2 lg:w-1/3 mt-5 text-center text-white hover:bg-blue-900 bg-blue-700 rounded-lg h-12">
+            Comprar
+          </button>
         </div>
         <Popup open={modalOpen} modal nested className="" >
           {
