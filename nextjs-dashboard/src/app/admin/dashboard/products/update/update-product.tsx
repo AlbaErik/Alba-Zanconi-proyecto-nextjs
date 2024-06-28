@@ -16,7 +16,6 @@ export default function Form(
     }:
         { id: string, name: string, description: string, price: number, image_url: string, category_name: string, categories: string[] }) {
 
-
     const [formData, setFormData] = useState({
         name: initialName,
         description: initialDescription,
@@ -24,19 +23,44 @@ export default function Form(
         image_url: initialImageUrl,
         category_id: category_name
     });
+    const [file, setFile] = useState<File | null>(null);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         const data = new FormData();
-        data.append('id', id);
-        data.append('name', formData.name);
-        data.append('description', formData.description);
-        data.append('price', formData.price); // El precio ahora es una cadena
-        data.append('image_url', formData.image_url);
-        data.append('category_id', formData.category_id);
 
-        await updateProduct(data);
+        if (file) {
+            data.append('file', file);
+        }
+
+        try {
+
+            const response = await fetch('/api/cloudinary', {
+                method: 'POST',
+                body: data
+            });
+
+            const result = await response.json();
+
+            const imageUrl = result.url;
+
+            setFormData(prevState => ({
+                ...prevState,
+                image_url: imageUrl
+            }));
+
+            data.append('id', id);
+            data.append('name', formData.name);
+            data.append('description', formData.description);
+            data.append('price', formData.price); // El precio ahora es una cadena
+            data.append('image_url', imageUrl);
+            data.append('category_id', formData.category_id);
+
+            await updateProduct(data);
+        } catch (error) {
+            console.error('Error uploading image:', error);
+        }
     };
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -101,20 +125,21 @@ export default function Form(
                     />
                 </div>
 
-                {/* Product Image URL */}
-                <div className="mb-4">
-                    <label htmlFor="image_url" className="mb-2 block text-sm font-medium">
-                        Image URL
-                    </label>
+                {/* Image_Url */}
+                <label htmlFor="file" className="mb-2 block text-lg font-medium">
+                    Seleccionar Foto
+                </label>
+                <div className="relative mt-2 rounded-md">
                     <input
-                        id="image_url"
-                        name="image_url"
-                        type="url"
-                        placeholder="Enter product image URL"
-                        className="peer block w-full rounded-md border border-gray-200 py-2 pl-3 pr-10 text-sm outline-2 placeholder-gray-500"
-                        value={formData.image_url}
-                        onChange={handleChange}
+                        id="file"
+                        type="file"
                         required
+                        onChange={(e) => {
+                            const selectedFile = e.target.files?.[0] || null;
+                            setFile(selectedFile);
+                        }}
+                        accept="image/x-png,image/gif,image/jpeg"
+                        className="block w-full text-sm text-gray-500 file:rounded-md file:border file:border-gray-300 file:bg-gray-100 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-gray-700 hover:file:bg-gray-200"
                     />
                 </div>
 

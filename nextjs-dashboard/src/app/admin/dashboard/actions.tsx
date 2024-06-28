@@ -8,7 +8,6 @@ const { v4: uuidv4 } = require('uuid');
 
 
 export async function deleteProduct(id: string) {
-  console.log(`Deleting product with id: ${id}`);
   await sql`DELETE FROM store.products WHERE id = ${id}`;
   revalidatePath('src/app/admin/dashboard/products');
 }
@@ -37,7 +36,6 @@ export type State = {
 };
 
 export async function createProduct(formData: FormData) {
-  console.log('Creating product...');
   const validatedFields = CreateProduct.safeParse({
     name: formData.get('name') as string,
     description: formData.get('description') as string,
@@ -56,7 +54,6 @@ export async function createProduct(formData: FormData) {
   const { name, description, price, image_url, category_id } = validatedFields.data;
 
   const category_name = await fetchCategoryByName(category_id);
-  console.log("category id: ", category_name);
   try {
     await sql`
       INSERT INTO store.products (id, name, description, price, image_url, category_id)
@@ -76,15 +73,12 @@ export async function createProduct(formData: FormData) {
 /*Update Product*/
 
 export async function updateProduct(formData: FormData) {
-  console.log('Updating product...');
-
-  console.log("CONTENIDO DEL FORMULARIO: ", formData);
 
   const validatedFields = CreateProduct.safeParse({
     name: formData.get('name') as string,
     description: formData.get('description') as string,
     price: parseFloat(formData.get('price') as string), // Convertir precio a número
-    image_url: formData.get('image_url') as string,
+    image_url: formData.get('image_url'),
     category_id: formData.get('category_id') as string,
   });
 
