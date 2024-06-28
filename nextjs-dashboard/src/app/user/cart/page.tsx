@@ -11,11 +11,11 @@ export default function Home() {
   const { state, setState } = useAppContext();
   const [productos,setProductos] = useState<ProductoEnCarrito[]>([]);
   const [idPreferencia, setIdPreferencia] = useState<string>("");
-  const [confirmarCarritoState, setConfirmarCarritoState] = useState<boolean>(false);
   const [modalOpen,setModalOpen] =useState<boolean>(false);
   const [indiceProductoAElimninar,setIndiceProductoAEliminar] = useState<number>(0);
 
   useEffect(() => {
+
     const fetchData = async () => {
       try {
         const items = "{ items:"+JSON.stringify(productos)+" }"
@@ -28,17 +28,13 @@ export default function Home() {
         });
         const preferencia = await response.json();
         setIdPreferencia(preferencia.id)
-        
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-    
-    if(confirmarCarritoState){
-      fetchData();
-      setConfirmarCarritoState(false)
-    }
-  },[confirmarCarritoState]);
+
+    fetchData();
+  },[productos]);
 
   useEffect(() => {
     setProductos(state);
@@ -48,15 +44,6 @@ export default function Home() {
   useEffect(() => {
     setProductos([...state]);
   }, [state]);
-
-  const confirmarCarrito = async () => {
-    if(productos.length!=0){
-      setConfirmarCarritoState(true);
-    }
-    else{
-      setIdPreferencia("");
-    }
-  };
 
   const eliminarProductoCarrito = () => {
     let productos = [...state];
@@ -91,38 +78,32 @@ export default function Home() {
           />
           ))}
         </div>
-        <div className="flex justify-center">
-          <button onClick={confirmarCarrito} className="px-[2%] text-white hover:bg-blue-900 bg-blue-700 rounded-lg h-12">
-            Confirmar Carrito
-          </button>
-
-        </div>
         <div className="flex justify-center mb-[20%]">
-          <Wallet 
+          <Wallet
             initialization={{preferenceId: idPreferencia}} 
           />
         </div>
         <Popup open={modalOpen} modal nested className="" >
-                {
-                  (close: () => void) => (
-                      <div className="" style={{ border: '3px  black rounded-lg' }}>
-                          <div className="flex justify-center text-3xl font-bold">
-                              ¿Confirmar Eliminacion?
-                          </div>
-                          <div className="flex justify-around">
-                              <button className="text-3xl font-bold hover:text-red-600" onClick=
-                                  {eliminarProductoCarrito}>
-                                      Si
-                              </button>
-                              <button className="text-3xl font-bold hover:text-green-600" onClick=
-                                  {noEliminarProductoCarrito}>
-                                      No
-                              </button>
-                          </div>
-                      </div>
-                  )
-                }
-            </Popup>
+          {
+            (close: () => void) => (
+                <div className="" style={{ border: '3px  black rounded-lg' }}>
+                    <div className="flex justify-center text-3xl font-bold">
+                        ¿Confirmar Eliminacion?
+                    </div>
+                    <div className="flex justify-around">
+                        <button className="text-3xl font-bold hover:text-red-600" onClick=
+                            {eliminarProductoCarrito}>
+                                Si
+                        </button>
+                        <button className="text-3xl font-bold hover:text-green-600" onClick=
+                            {noEliminarProductoCarrito}>
+                                No
+                        </button>
+                    </div>
+                </div>
+            )
+          }
+        </Popup>
       </main>
     );
   }
