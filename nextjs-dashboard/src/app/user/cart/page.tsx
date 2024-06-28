@@ -5,6 +5,8 @@ import { ProductoEnCarrito, useAppContext } from "@/app/context";
 import { useEffect, useState } from "react";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import { ToastContainer, toast} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function Home() {
   
@@ -60,7 +62,12 @@ export default function Home() {
       }
     };
 
-    fetchData();
+    if(productos.length>0){
+      fetchData();
+    }
+    else{
+      toast("Agrega algun producto antes de comprar");
+    }
   }
 
     return (
@@ -108,6 +115,13 @@ export default function Home() {
             )
           }
         </Popup>
+        <ToastContainer
+          theme="dark"
+          position="bottom-right"
+          closeOnClick
+          autoClose={2000}
+          pauseOnHover={false}
+        />
       </main>
     );
   }
