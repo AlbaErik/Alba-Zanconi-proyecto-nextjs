@@ -14,12 +14,15 @@ interface CardProps {
   onButtonClick: () => void
 }
 
-const ProductCard: React.FC<CardProps> = ({ name, price, id, imageSrc, description, category_name,onButtonClick}) => {
+const ProductCard: React.FC<CardProps> = ({ name, price, id, imageSrc, description, category_name, onButtonClick}) => {
 
   const { state, setState } = useAppContext();
   const [executeEffect, setExecuteEffect] = useState(false);
 
-  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+  const handleButtonCLick = () => {
+    setExecuteEffect(true);
+    onButtonClick();
+  }
 
   function buscarProductoEnCarrito(): number{
     let indice = 0;
@@ -62,6 +65,7 @@ const ProductCard: React.FC<CardProps> = ({ name, price, id, imageSrc, descripti
       }
     }
     agregarProducto();
+
   }, [executeEffect]);
   
   return (
@@ -77,7 +81,7 @@ const ProductCard: React.FC<CardProps> = ({ name, price, id, imageSrc, descripti
 
       <div className="flex items-center justify-between mb-3 mt-3">
         <h3 className="pl-[5%] text-3xl font-bold text-gray-900 ">{"$"+price}</h3>
-        <button onClick={onButtonClick} className="mr-[5%] pr-3 pl-3 overflow-hidden inline-block align-middle text-center text-white hover:bg-cyan-800 bg-cyan-700 rounded-lg h-8">
+        <button onClick={handleButtonCLick} className="mr-[5%] pr-3 pl-3 overflow-hidden inline-block align-middle text-center text-white hover:bg-cyan-800 bg-cyan-700 rounded-lg h-8">
           Agregar
         </button>
       </div>

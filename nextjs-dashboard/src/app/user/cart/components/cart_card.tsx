@@ -8,9 +8,11 @@ interface CardProps {
   price: number;
   imageSrc: string;
   cantidad: number
+  setModalOpen: (flag: boolean) => void;
+  setIndiceProductoAEliminar: (flag: number) => void;
 }
 
-const CartCard: React.FC<CardProps> = ({ id, name, price, imageSrc, cantidad }) =>{
+const CartCard: React.FC<CardProps> = ({ id, name, price, imageSrc, cantidad, setModalOpen, setIndiceProductoAEliminar }) =>{
 
   const {state, setState} = useAppContext();
 
@@ -29,20 +31,32 @@ const CartCard: React.FC<CardProps> = ({ id, name, price, imageSrc, cantidad }) 
   }
 
   function removeProduct(){
-    let productos = [...state];
-    let i=0;
-    let encontre = false;
-    while(!encontre){
-      if(productos[i].id===id){
-        productos[i].quantity=productos[i].quantity-1;
-        if(productos[i].quantity===0){
-          productos.splice(i,1);
+    try{
+      let productos = [...state];
+      let i=0;
+      let encontre = false;
+      let elimine = false;
+      while(!encontre){
+        if(productos[i].id===id){
+          
+          if(productos[i].quantity===1){
+            console.log("Remove product");
+            setIndiceProductoAEliminar(i);
+            setModalOpen(true);
+          }
+          else{
+            productos[i].quantity=productos[i].quantity-1;
+            elimine=true;
+          }
+          encontre = true;
         }
-        encontre = true;
+        i++;
       }
-      i++;
+      if(elimine){
+        setState(productos);
+      }
     }
-    setState(productos);
+    catch{}
   }
 
   return(

@@ -8,16 +8,17 @@ import 'reactjs-popup/dist/index.css';
 
 export default function Home() {
   
-  const { state } = useAppContext();
+  const { state, setState } = useAppContext();
   const [productos,setProductos] = useState<ProductoEnCarrito[]>([]);
   const [idPreferencia, setIdPreferencia] = useState<string>("");
   const [confirmarCarritoState, setConfirmarCarritoState] = useState<boolean>(false);
+  const [modalOpen,setModalOpen] =useState<boolean>(false);
+  const [indiceProductoAElimninar,setIndiceProductoAEliminar] = useState<number>(0);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const items = "{ items:"+JSON.stringify(productos)+" }"
-
         const response = await fetch("/api/checkout",{
           method: 'POST',
           headers: {
@@ -37,14 +38,11 @@ export default function Home() {
       fetchData();
       setConfirmarCarritoState(false)
     }
-    
   },[confirmarCarritoState]);
 
   useEffect(() => {
-  
     setProductos(state);
     initMercadoPago('APP_USR-cf082da5-a989-4d78-8c11-9b80f90da071', { locale: 'es-AR' });
-    
   },[]);
 
   useEffect(() => {
@@ -58,8 +56,21 @@ export default function Home() {
     else{
       setIdPreferencia("");
     }
-    
   };
+
+  const eliminarProductoCarrito = () => {
+    let productos = [...state];
+    productos[indiceProductoAElimninar].quantity=productos[indiceProductoAElimninar].quantity-1;
+    productos.splice(indiceProductoAElimninar,1);
+    setState(productos);
+    setModalOpen(false);
+    close();
+  }
+
+  const noEliminarProductoCarrito = () => {
+    setModalOpen(false);
+    close();
+  }
 
     return (
       <main className="pt-[1%]">
@@ -75,6 +86,8 @@ export default function Home() {
             price={productos[index].unit_price}
             imageSrc ="/headphones.webp"
             cantidad={productos[index].quantity}
+            setModalOpen={setModalOpen}
+            setIndiceProductoAEliminar={setIndiceProductoAEliminar}
           />
           ))}
         </div>
@@ -89,19 +102,21 @@ export default function Home() {
             initialization={{preferenceId: idPreferencia}} 
           />
         </div>
-        <Popup trigger=
-                {<button> Click to open modal </button>} 
-                modal nested>
+        <Popup open={modalOpen} modal nested className="" >
                 {
                   (close: () => void) => (
-                      <div className='modal'>
-                          <div className='content'>
-                              Welcome to GFG!!!
+                      <div className="" style={{ border: '3px  black rounded-lg' }}>
+                          <div className="flex justify-center text-3xl font-bold">
+                              ¿Confirmar Eliminacion?
                           </div>
-                          <div>
-                              <button onClick=
-                                  {() => close()}>
-                                      Close modal
+                          <div className="flex justify-around">
+                              <button className="text-3xl font-bold hover:text-red-600" onClick=
+                                  {eliminarProductoCarrito}>
+                                      Si
+                              </button>
+                              <button className="text-3xl font-bold hover:text-green-600" onClick=
+                                  {noEliminarProductoCarrito}>
+                                      No
                               </button>
                           </div>
                       </div>
