@@ -49,9 +49,9 @@ const ProductCard: React.FC<CardProps> = ({ name, price, id, imageSrc, descripti
   }
   
   return (
-    <div className="card rounded-lg bg-white shadow-md">
+    <div className="flex flex-col justify-between rounded-lg bg-white shadow-md">
 
-      <div className="grid justify-items-center">
+      <div className="grid justify-items-center pt-3">
           <Image className="card-image" src={imageSrc} alt={name} width={200} height={30}/>
       </div>
       
@@ -59,7 +59,7 @@ const ProductCard: React.FC<CardProps> = ({ name, price, id, imageSrc, descripti
         {name}
       </Link>
 
-      <div className="flex items-center justify-between mb-3 mt-3">
+      <div className="flex items-center justify-between mb-3 mt-3 pt-auto pb-3">
         <h3 className="pl-[5%] text-3xl font-bold text-gray-900 ">{"$"+price}</h3>
         <button onClick={handleButtonCLick} className="mr-[5%] pr-3 pl-3 overflow-hidden inline-block align-middle text-center text-white hover:bg-cyan-800 bg-cyan-700 rounded-lg h-8">
           Agregar

@@ -82,7 +82,7 @@ export default function Home() {
             id={`${productos[index].id}`}
             name={`${productos[index].title}`} 
             price={productos[index].unit_price}
-            imageSrc ="/headphones.webp"
+            imageSrc = {productos[index].picture_url}
             cantidad={productos[index].quantity}
             setModalOpen={setModalOpen}
             setIndiceProductoAEliminar={setIndiceProductoAEliminar}

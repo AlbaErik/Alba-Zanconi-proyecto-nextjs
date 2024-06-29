@@ -73,7 +73,7 @@ export default function Home() {
           name={`${productos[index].name}`} 
           price={productos[index].price}
           id={`${productos[index].id}`}
-          imageSrc ="/headphones.webp"
+          imageSrc ={productos[index].image_url}
           description={`${productos[index].description}`}
           category_name={`${productos[index].category_name}`}
           onButtonClick={handleClick}
