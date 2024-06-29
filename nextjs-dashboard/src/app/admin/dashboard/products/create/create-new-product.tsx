@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { createProduct } from '../../actions';
 import { useState } from 'react';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 
 export default function Form({ categories }: { categories: string[] }) {
   const [formData, setFormData] = useState({
@@ -14,10 +16,9 @@ export default function Form({ categories }: { categories: string[] }) {
   });
 
   const [file, setFile] = useState<File | null>(null);
+  const [popUpVisible, setPopUpVisible] = useState<boolean>(false);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
+  const handleSubmit = async () => {
     const data = new FormData();
 
     if (file) {
@@ -25,7 +26,6 @@ export default function Form({ categories }: { categories: string[] }) {
     }
 
     try {
-
       const response = await fetch('/api/cloudinary', {
         method: 'POST',
         body: data
@@ -34,11 +34,6 @@ export default function Form({ categories }: { categories: string[] }) {
       const result = await response.json();
       const imageUrl = result.url;
 
-      setFormData(prevState => ({
-        ...prevState,
-        image_url: imageUrl
-      }));
-
       data.append('name', formData.name);
       data.append('description', formData.description);
       data.append('price', formData.price);
@@ -46,11 +41,12 @@ export default function Form({ categories }: { categories: string[] }) {
       data.append('category_id', formData.category_id);
 
       await createProduct(data);
-      
+      setPopUpVisible(false);
     } catch (error) {
       console.error('Error uploading image:', error);
     }
   };
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
     setFormData({
@@ -59,8 +55,12 @@ export default function Form({ categories }: { categories: string[] }) {
     });
   };
 
+  const handleConfirmCreate = () => {
+    setPopUpVisible(true);
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
+    <form>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Product Name */}
         <div className="mb-4">
@@ -164,12 +164,42 @@ export default function Form({ categories }: { categories: string[] }) {
           Cancel
         </Link>
         <button
-          type="submit"
+          type="button"
+          onClick={handleConfirmCreate}
           className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium"
         >
           Create Product
         </button>
       </div>
+
+      <Popup
+        open={popUpVisible}
+        onClose={() => setPopUpVisible(false)}
+        modal
+        nested
+      >
+        {(close: () => void) => (
+          <div className="bg-white p-6 rounded-lg shadow-xl">
+            <div className="flex justify-center text-3xl font-bold mb-4">
+              ¿Confirmar Creación?
+            </div>
+            <div className="flex justify-around">
+              <button
+                className="flex items-center text-3xl font-bold text-blue-600 hover:text-blue-800 transition-colors"
+                onClick={handleSubmit}
+              >
+                Sí
+              </button>
+              <button
+                className="flex items-center text-3xl font-bold text-red-600 hover:text-red-800 transition-colors"
+                onClick={() => setPopUpVisible(false)}
+              >
+                No
+              </button>
+            </div>
+          </div>
+        )}
+      </Popup>
     </form>
   );
 }
