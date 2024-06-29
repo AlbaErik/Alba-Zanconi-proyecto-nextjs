@@ -3,19 +3,26 @@
 import Link from 'next/link';
 import { updateProduct } from '../../actions';
 import { useState } from 'react';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 
-export default function Form(
-    {
-        id,
-        name: initialName,
-        description: initialDescription,
-        price: initialPrice,
-        image_url: initialImageUrl,
-        category_name,
-        categories
-    }:
-        { id: string, name: string, description: string, price: number, image_url: string, category_name: string, categories: string[] }) {
-
+export default function Form({
+    id,
+    name: initialName,
+    description: initialDescription,
+    price: initialPrice,
+    image_url: initialImageUrl,
+    category_name,
+    categories
+}: {
+    id: string,
+    name: string,
+    description: string,
+    price: number,
+    image_url: string,
+    category_name: string,
+    categories: string[]
+}) {
     const [formData, setFormData] = useState({
         name: initialName,
         description: initialDescription,
@@ -24,10 +31,9 @@ export default function Form(
         category_id: category_name
     });
     const [file, setFile] = useState<File | null>(null);
+    const [popUpVisible, setPopUpVisible] = useState<boolean>(false);
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
+    const handleSubmit = async () => {
         const data = new FormData();
 
         if (file) {
@@ -35,20 +41,13 @@ export default function Form(
         }
 
         try {
-
             const response = await fetch('/api/cloudinary', {
                 method: 'POST',
                 body: data
             });
 
             const result = await response.json();
-
             const imageUrl = result.url;
-
-            setFormData(prevState => ({
-                ...prevState,
-                image_url: imageUrl
-            }));
 
             data.append('id', id);
             data.append('name', formData.name);
@@ -58,6 +57,7 @@ export default function Form(
             data.append('category_id', formData.category_id);
 
             await updateProduct(data);
+            setPopUpVisible(false);
         } catch (error) {
             console.error('Error uploading image:', error);
         }
@@ -71,8 +71,12 @@ export default function Form(
         });
     };
 
+    const handleConfirmUpdate = () => {
+        setPopUpVisible(true);
+    };
+
     return (
-        <form onSubmit={handleSubmit}>
+        <form>
             <div className="rounded-md bg-gray-50 p-4 md:p-6">
                 {/* Product Name */}
                 <div className="mb-4">
@@ -176,12 +180,42 @@ export default function Form(
                     Cancel
                 </Link>
                 <button
-                    type="submit"
+                    type="button"
+                    onClick={handleConfirmUpdate}
                     className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium"
                 >
                     Update Product
                 </button>
             </div>
+
+            <Popup
+                open={popUpVisible}
+                onClose={() => setPopUpVisible(false)}
+                modal
+                nested
+            >
+                {(close: () => void) => (
+                    <div className="bg-white p-6 rounded-lg shadow-xl">
+                        <div className="flex justify-center text-3xl font-bold mb-4">
+                            ¿Confirmar Actualización?
+                        </div>
+                        <div className="flex justify-around">
+                            <button
+                                className="flex items-center text-3xl font-bold text-blue-600 hover:text-blue-800 transition-colors"
+                                onClick={handleSubmit}
+                            >
+                                Sí
+                            </button>
+                            <button
+                                className="flex items-center text-3xl font-bold text-red-600 hover:text-red-800 transition-colors"
+                                onClick={() => setPopUpVisible(false)}
+                            >
+                                No
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </Popup>
         </form>
     );
 }
