@@ -1,7 +1,7 @@
 import { ProductWithCategory, fetchAllProducts } from '@/app/lib/data';
 import React from 'react';
 import '@/app/admin/ui/style.css';
-import { DeleteProduct } from './buttons';
+import { DeleteProduct } from './deleteButton';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -31,28 +31,35 @@ function Card({ title, product }: { title: string; product: ProductWithCategory 
 
 function ProductCard({ product }: { product: ProductWithCategory }) {
     return (
-        <div className="border rounded-lg p-4 shadow-lg max-w-sm mx-auto bg-white">
+        <div className="border rounded-lg p-4 shadow-lg max-w-xxl mx-auto bg-white">
             <div className="relative mb-4" style={{ maxWidth: '100%', height: 'auto' }}>
                 <Image
                     src={product.image_url}
                     alt={product.name}
-                    width={500}
-                    height={300}
+                    width={250}
+                    height={150}
                     className="rounded-lg"
                 />
             </div>
-            <div className="text-left">
-                <p className="font-semibold text-lg mb-1 break-words">Description: <span className="font-normal">{product.description}</span></p>
-                <p className="font-semibold text-lg mb-1">Category: <span className="font-normal">{product.category_name}</span></p>
-                <p className="font-semibold text-lg mb-4">Price: <span className="font-normal">${product.price}</span></p>
+            <div className="text-left max-h-48 overflow-y-auto">
+                <p className="font-semibold text-lg mb-1 break-words">
+                    Description: <span className="font-normal">{product.description}</span>
+                </p>
+                <p className="font-semibold text-lg mb-1 break-words">
+                    Category: <span className="font-normal">{product.category_name}</span>
+                </p>
+                <p className="font-semibold text-lg mb-4 break-words">
+                    Price: <span className="font-normal">${product.price}</span>
+                </p>
             </div>
             <div className="flex justify-between">
-                <DeleteProduct id={product.id} />
                 <Link href={{ pathname: `/admin/dashboard/products/update/${product.id}` }}>
                     <button className="rounded-md border p-2 hover:bg-gray-100">
                         Update Product
                     </button>
                 </Link>
+                <DeleteProduct id={product.id} />
+
             </div>
         </div>
     );
