@@ -106,7 +106,7 @@ export async function updateProduct(formData: FormData) {
   } catch (error) {
     console.error('Database Error:', error);
     return {
-      message: 'Error de base de datos. No se pudo crear el producto.',
+      message: 'Error de base de datos. No se pudo modificar el producto.',
     };
   }
 

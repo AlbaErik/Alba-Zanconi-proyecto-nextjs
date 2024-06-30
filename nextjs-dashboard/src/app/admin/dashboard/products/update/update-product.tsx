@@ -5,6 +5,8 @@ import { updateProduct } from '../../actions';
 import { useState } from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Form({
     id,
@@ -56,12 +58,19 @@ export default function Form({
 
             } catch (error) {
                 console.error('Error uploading image:', error);
+                return; // Detener la ejecución si hay un error
             }
         } else {
             data.append('image_url', initialImageUrl);
         }
-        await updateProduct(data);
-        setPopUpVisible(false);
+        try {
+            await updateProduct(data);
+            setPopUpVisible(false);
+            toast.success('Se aplicaron los cambios satisfactoriamente');
+        } catch (error) {
+            console.error('Error updating product:', error);
+        }
+
     };
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -217,6 +226,7 @@ export default function Form({
                     </div>
                 )}
             </Popup>
+            <ToastContainer />
         </form>
     );
 }

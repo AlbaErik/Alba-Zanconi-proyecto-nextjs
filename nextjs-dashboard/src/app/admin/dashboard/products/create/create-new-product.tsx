@@ -5,6 +5,8 @@ import { createProduct } from '../../actions';
 import { useState } from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Form({ categories }: { categories: string[] }) {
   const [formData, setFormData] = useState({
@@ -43,6 +45,8 @@ export default function Form({ categories }: { categories: string[] }) {
 
       await createProduct(data);
       setPopUpVisible(false);
+      toast.success('Se creo el producto satisfactoriamente');
+
     } catch (error) {
       console.error('Error uploading image:', error);
     }
@@ -208,6 +212,8 @@ export default function Form({ categories }: { categories: string[] }) {
           </div>
         )}
       </Popup>
+      <ToastContainer />
+
     </form>
   );
 }
