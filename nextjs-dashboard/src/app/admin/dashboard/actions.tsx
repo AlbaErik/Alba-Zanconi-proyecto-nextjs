@@ -8,7 +8,11 @@ const { v4: uuidv4 } = require('uuid');
 
 
 export async function deleteProduct(id: string) {
-  await sql`DELETE FROM store.products WHERE id = ${id}`;
+  try {
+    await sql`DELETE FROM store.products WHERE id = ${id}`;
+  } catch (error) {
+    console.error('Error deleting product:', error);
+  }
   revalidatePath('src/app/admin/dashboard/products');
 }
 

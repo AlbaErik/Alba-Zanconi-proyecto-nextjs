@@ -77,7 +77,7 @@ function ProductCard({ product }: { product: ProductWithCategory }) {
                     nested
                 >
                     {(close: () => void) => (
-                        <div className="bg-white p-6 rounded-lg shadow-xl">
+                        <div className="bg-red-100 p-6 rounded-lg shadow-xl">
                             <div className="flex justify-center text-3xl font-bold mb-4">
                                 ¿Confirmar Eliminación?
                             </div>

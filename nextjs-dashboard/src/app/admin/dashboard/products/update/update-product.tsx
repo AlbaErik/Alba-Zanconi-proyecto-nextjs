@@ -36,31 +36,32 @@ export default function Form({
     const handleSubmit = async () => {
         const data = new FormData();
 
+        data.append('id', id);
+        data.append('name', formData.name);
+        data.append('description', formData.description);
+        data.append('price', formData.price); // El precio ahora es una cadena
+        data.append('category_id', formData.category_id);
+
         if (file) {
             data.append('file', file);
+            try {
+                const response = await fetch('/api/cloudinary', {
+                    method: 'POST',
+                    body: data
+                });
+                const result = await response.json();
+                const imageUrl = result.url;
+
+                data.append('image_url', imageUrl);
+
+            } catch (error) {
+                console.error('Error uploading image:', error);
+            }
+        } else {
+            data.append('image_url', initialImageUrl);
         }
-
-        try {
-            const response = await fetch('/api/cloudinary', {
-                method: 'POST',
-                body: data
-            });
-
-            const result = await response.json();
-            const imageUrl = result.url;
-
-            data.append('id', id);
-            data.append('name', formData.name);
-            data.append('description', formData.description);
-            data.append('price', formData.price); // El precio ahora es una cadena
-            data.append('image_url', imageUrl);
-            data.append('category_id', formData.category_id);
-
-            await updateProduct(data);
-            setPopUpVisible(false);
-        } catch (error) {
-            console.error('Error uploading image:', error);
-        }
+        await updateProduct(data);
+        setPopUpVisible(false);
     };
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -104,7 +105,7 @@ export default function Form({
                         id="description"
                         name="description"
                         placeholder="Enter product description"
-                        className="peer block w-full rounded-md border border-gray-200 py-2 pl-3 pr-10 text-sm outline-2 placeholder-gray-500"
+                        className="peer block w-full h-48 rounded-md border border-gray-200 py-2 pl-3 pr-10 text-sm outline-2 placeholder-gray-500"
                         value={formData.description}
                         onChange={handleChange}
                         required
@@ -195,7 +196,7 @@ export default function Form({
                 nested
             >
                 {(close: () => void) => (
-                    <div className="bg-white p-6 rounded-lg shadow-xl">
+                    <div className="bg-blue-100 p-6 rounded-lg shadow-xl">
                         <div className="flex justify-center text-3xl font-bold mb-4">
                             ¿Confirmar Actualización?
                         </div>
