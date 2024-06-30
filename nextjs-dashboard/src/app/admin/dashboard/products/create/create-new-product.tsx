@@ -17,6 +17,7 @@ export default function Form({ categories }: { categories: string[] }) {
 
   const [file, setFile] = useState<File | null>(null);
   const [popUpVisible, setPopUpVisible] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async () => {
     const data = new FormData();
@@ -56,6 +57,11 @@ export default function Form({ categories }: { categories: string[] }) {
   };
 
   const handleConfirmCreate = () => {
+    if (!file) {
+      setError('Por favor seleccione una imagen antes de crear el producto.');
+      return;
+    }
+    setError(null);
     setPopUpVisible(true);
   };
 
@@ -130,6 +136,8 @@ export default function Form({ categories }: { categories: string[] }) {
             className="block w-full text-sm text-gray-500 file:rounded-md file:border file:border-gray-300 file:bg-gray-100 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-gray-700 hover:file:bg-gray-200"
           />
         </div>
+
+        {error && <p className="text-red-500 mt-2">{error}</p>}
 
         {/* Product Category */}
         <div className="mb-4">
