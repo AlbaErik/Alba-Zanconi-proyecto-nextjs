@@ -6,6 +6,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Popup from 'reactjs-popup';
 import { deleteProduct } from '../../dashboard/actions';
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function Card({ title, product }: { title: string; product: ProductWithCategory }) {
     return (
@@ -30,6 +32,7 @@ function ProductCard({ product }: { product: ProductWithCategory }) {
     const handleConfirmDelete = async () => {
         try {
             await deleteProduct(product.id);
+            toast('Product deleted successfully');
             setModalOpen(false);
         } catch (error) {
             console.error('Error deleting product:', error);
@@ -98,6 +101,13 @@ function ProductCard({ product }: { product: ProductWithCategory }) {
                         </div>
                     )}
                 </Popup>
+                <ToastContainer
+                    theme="dark"
+                    position="bottom-right"
+                    closeOnClick
+                    autoClose={2000}
+                    pauseOnHover={false}
+                />
             </div>
         </div>
     );
