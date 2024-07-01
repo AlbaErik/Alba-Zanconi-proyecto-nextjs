@@ -72,6 +72,52 @@ export type ProductWithCategory = {
     category_name: string;
 };
 
+const ITEMS_PER_PAGE = 6;
+export async function fetchFilteredProducts(
+    query: string,
+    currentPage: number,
+): Promise<ProductWithCategory[]> {
+    noStore()
+    const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
+    try {
+        const data = await sql`
+        SELECT 
+          products.id,
+          products.name,
+          products.description,
+          products.price,
+          products.image_url,
+          products.category_id
+        FROM store.products
+        WHERE
+          products.name ILIKE ${`%${query}%`} OR
+          products.description ILIKE ${`%${query}%`}
+        LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+      `;
+
+        // Mapear los productos para reemplazar category_id por category_name
+        const productsWithCategoryName: ProductWithCategory[] = await Promise.all(
+            data.rows.map(async (product) => {
+                const categoryName = await fetchCategoryById(product.category_id);
+                return {
+                    id: product.id,
+                    name: product.name,
+                    description: product.description,
+                    price: product.price,
+                    image_url: product.image_url,
+                    category_name: categoryName,
+                };
+            })
+        );
+
+        return productsWithCategoryName;
+    } catch (err) {
+        console.error('Database Error:', err);
+        throw new Error('Failed to fetch products.');
+    }
+}
+
 export async function fetchAllProducts(): Promise<ProductWithCategory[]> {
     noStore()
     try {

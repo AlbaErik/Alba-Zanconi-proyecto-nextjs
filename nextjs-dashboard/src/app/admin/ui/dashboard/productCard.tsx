@@ -52,26 +52,26 @@ function ProductCard({ product }: { product: ProductWithCategory }) {
             </div>
             <div className="text-left max-h-48 overflow-y-auto">
                 <p className="font-semibold text-lg mb-1 break-words">
-                    Description: <span className="font-normal">{product.description}</span>
+                    Descripcion: <span className="font-normal">{product.description}</span>
                 </p>
                 <p className="font-semibold text-lg mb-1 break-words">
-                    Category: <span className="font-normal">{product.category_name}</span>
+                    Categoria: <span className="font-normal">{product.category_name}</span>
                 </p>
                 <p className="font-semibold text-lg mb-4 break-words">
-                    Price: <span className="font-normal">${product.price}</span>
+                    Precio: <span className="font-normal">${product.price}</span>
                 </p>
             </div>
             <div className="flex justify-between">
                 <Link href={{ pathname: `/admin/dashboard/products/update/${product.id}` }}>
                     <button className="rounded-md border p-2 hover:bg-blue-100">
-                        Update Product
+                        Editar Producto
                     </button>
                 </Link>
                 <button
                     className="rounded-md border p-2 hover:bg-red-100"
                     onClick={handleDeleteClick}
                 >
-                    Delete Product
+                    Borrar Producto
                 </button>
                 <Popup
                     open={popUpVisible}

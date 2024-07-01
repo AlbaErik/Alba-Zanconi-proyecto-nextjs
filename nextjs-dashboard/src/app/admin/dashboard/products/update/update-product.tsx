@@ -91,7 +91,7 @@ export default function Form({
                 {/* Product Name */}
                 <div className="mb-4">
                     <label htmlFor="name" className="mb-2 block text-sm font-medium">
-                        Product Name
+                        Nombre del Producto
                     </label>
                     <input
                         id="name"
@@ -108,7 +108,7 @@ export default function Form({
                 {/* Product Description */}
                 <div className="mb-4">
                     <label htmlFor="description" className="mb-2 block text-sm font-medium">
-                        Description
+                        Descripcion
                     </label>
                     <textarea
                         id="description"
@@ -124,7 +124,7 @@ export default function Form({
                 {/* Product Price */}
                 <div className="mb-4">
                     <label htmlFor="price" className="mb-2 block text-sm font-medium">
-                        Price
+                        Precio
                     </label>
                     <input
                         id="price"
@@ -160,7 +160,7 @@ export default function Form({
                 {/* Product Category */}
                 <div className="mb-4">
                     <label htmlFor="category_id" className="mb-2 block text-sm font-medium">
-                        Category
+                        Categoria
                     </label>
                     <select
                         id="category_id"
@@ -187,14 +187,14 @@ export default function Form({
                     href="../"
                     className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
                 >
-                    Cancel
+                    Cancelar
                 </Link>
                 <button
                     type="button"
                     onClick={handleConfirmUpdate}
                     className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium"
                 >
-                    Update Product
+                    Guardar
                 </button>
             </div>
 
