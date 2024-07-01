@@ -40,8 +40,8 @@ function ProductCard({ product }: { product: ProductWithCategory }) {
     };
 
     return (
-        <div className="border rounded-lg p-4 shadow-lg max-w-xxl mx-auto bg-white">
-            <div className="relative mb-4" style={{ maxWidth: '100%', height: 'auto' }}>
+        <div className="border rounded-lg p-4 shadow-lg max-w-xxl mx-auto bg-white flex">
+            <div className="flex-shrink-0 mr-4">
                 <Image
                     src={product.image_url}
                     alt={product.name}
@@ -49,21 +49,23 @@ function ProductCard({ product }: { product: ProductWithCategory }) {
                     height={150}
                     className="rounded-lg"
                 />
+                <div className="mt-2">
+                    <p className="font-semibold text-lg mb-1 break-words">
+                        Categoria: <span className="font-normal">{product.category_name}</span>
+                    </p>
+                    <p className="font-semibold text-lg mb-4 break-words">
+                        Precio: <span className="font-normal">${product.price}</span>
+                    </p>
+                </div>
             </div>
-            <div className="text-left max-h-48 overflow-y-auto">
-                <p className="font-semibold text-lg mb-1 break-words">
-                    Descripcion: <span className="font-normal">{product.description}</span>
-                </p>
-                <p className="font-semibold text-lg mb-1 break-words">
-                    Categoria: <span className="font-normal">{product.category_name}</span>
-                </p>
-                <p className="font-semibold text-lg mb-4 break-words">
-                    Precio: <span className="font-normal">${product.price}</span>
+            <div className="text-left flex-grow max-h-48 overflow-y-auto pr-4">
+                <p className="font-normal text-lg mb-1 break-words whitespace-pre-line">
+                    {product.description}
                 </p>
             </div>
-            <div className="flex justify-between">
+            <div className="flex flex-col justify-end ml-4">
                 <Link href={{ pathname: `/admin/dashboard/products/update/${product.id}` }}>
-                    <button className="rounded-md border p-2 hover:bg-blue-100">
+                    <button className="rounded-md border p-2 mb-2 hover:bg-blue-100">
                         Editar Producto
                     </button>
                 </Link>
