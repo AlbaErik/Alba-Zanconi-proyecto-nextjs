@@ -45,7 +45,7 @@ export default function Form({ categories }: { categories: string[] }) {
 
       await createProduct(data);
       setPopUpVisible(false);
-      toast.success('Se creo el producto satisfactoriamente');
+      toast('Se creo el producto satisfactoriamente');
 
     } catch (error) {
       console.error('Error uploading image:', error);
