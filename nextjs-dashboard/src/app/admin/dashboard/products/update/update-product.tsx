@@ -34,6 +34,7 @@ export default function Form({
     });
     const [file, setFile] = useState<File | null>(null);
     const [popUpVisible, setPopUpVisible] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = async () => {
         const data = new FormData();
@@ -82,6 +83,11 @@ export default function Form({
     };
 
     const handleConfirmUpdate = () => {
+        if (!formData.name || !formData.description || !formData.price || !formData.category_id) {
+            setError('Por favor, complete todos los campos antes de guardar.');
+            return;
+        }
+        setError(null);
         setPopUpVisible(true);
     };
 
@@ -147,7 +153,6 @@ export default function Form({
                     <input
                         id="file"
                         type="file"
-                        required
                         onChange={(e) => {
                             const selectedFile = e.target.files?.[0] || null;
                             setFile(selectedFile);
@@ -180,6 +185,8 @@ export default function Form({
                         ))}
                     </select>
                 </div>
+
+                {error && <p className="text-red-500 mt-2">{error}</p>}
             </div>
 
             <div className="mt-6 flex justify-end gap-4">

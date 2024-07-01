@@ -30,7 +30,7 @@ function UserCard({ user }: { user: User }) {
     return (
         <div>
             <p>Email: {user.email}</p>
-            <p>Role: {user.role}</p>
+            <p>Rol: {user.role}</p>
         </div>
     );
 }

@@ -5,7 +5,7 @@ export default async function Page() {
 
     return (
         <div>
-            <h1>Users list</h1>
+            <h1>Lista de Usuarios</h1>
             <UsersList />
         </div>
     );
