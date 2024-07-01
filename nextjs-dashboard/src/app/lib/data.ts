@@ -63,6 +63,24 @@ export async function fetchAllCategories(): Promise<string[]> {
     }
 }
 
+export async function fetchProductsPages(query: string) {
+    noStore();
+    try {
+      const count = await sql`SELECT COUNT(*)
+      FROM store.products
+      WHERE
+        products.name ILIKE ${`%${query}%`} OR
+        products.description ILIKE ${`%${query}%`}
+    `;
+  
+      const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+      return totalPages;
+    } catch (error) {
+      console.error('Database Error:', error);
+      throw new Error('Failed to fetch total number of products.');
+    }
+  }
+
 export type ProductWithCategory = {
     id: string;
     name: string;
