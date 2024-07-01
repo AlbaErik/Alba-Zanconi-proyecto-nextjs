@@ -45,7 +45,7 @@ export default function Form({ categories }: { categories: string[] }) {
 
       await createProduct(data);
       setPopUpVisible(false);
-      toast('Se creo el producto satisfactoriamente');
+      toast.success('Se creó el producto satisfactoriamente');
 
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -65,6 +65,12 @@ export default function Form({ categories }: { categories: string[] }) {
       setError('Por favor seleccione una imagen antes de crear el producto.');
       return;
     }
+
+    if (!formData.name || !formData.description || !formData.price || !formData.category_id) {
+      setError('Por favor complete todos los campos antes de crear el producto.');
+      return;
+    }
+
     setError(null);
     setPopUpVisible(true);
   };
@@ -141,7 +147,6 @@ export default function Form({ categories }: { categories: string[] }) {
           />
         </div>
 
-        {error && <p className="text-red-500 mt-2">{error}</p>}
 
         {/* Product Category */}
         <div className="mb-4">
@@ -166,6 +171,9 @@ export default function Form({ categories }: { categories: string[] }) {
             ))}
           </select>
         </div>
+
+        {error && <p className="text-red-500 mt-2">{error}</p>}
+
       </div>
 
       <div className="mt-6 flex justify-end gap-4">
@@ -213,7 +221,6 @@ export default function Form({ categories }: { categories: string[] }) {
         )}
       </Popup>
       <ToastContainer />
-
     </form>
   );
 }
