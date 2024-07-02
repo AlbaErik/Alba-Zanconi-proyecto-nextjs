@@ -49,7 +49,7 @@ function ProductCard({ product }: { product: ProductWithCategory }) {
                     height={150}
                     className="rounded-lg"
                 />
-                <div className="mt-2">
+                <div className="mt-2 text-left">
                     <p className="font-semibold text-lg mb-1 break-words">
                         Categoria: <span className="font-normal">{product.category_name}</span>
                     </p>
