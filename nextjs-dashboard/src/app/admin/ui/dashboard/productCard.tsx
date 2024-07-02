@@ -32,7 +32,7 @@ function ProductCard({ product }: { product: ProductWithCategory }) {
     const handleConfirmDelete = async () => {
         try {
             await deleteProduct(product.id);
-            toast('Product deleted successfully');
+            //toast('Product deleted successfully');
             setModalOpen(false);
         } catch (error) {
             console.error('Error deleting product:', error);
