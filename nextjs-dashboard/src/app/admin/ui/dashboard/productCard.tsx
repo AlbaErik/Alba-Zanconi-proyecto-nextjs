@@ -40,7 +40,7 @@ function ProductCard({ product }: { product: ProductWithCategory }) {
     };
 
     return (
-        <div className="border rounded-lg p-4 shadow-lg max-w-xxl mx-auto bg-white flex">
+        <div className="border rounded-lg px-4 shadow-lg bg-white lg:flex ">
             <div className="flex-shrink-0 mr-4">
                 <Image
                     src={product.image_url}
@@ -59,11 +59,12 @@ function ProductCard({ product }: { product: ProductWithCategory }) {
                 </div>
             </div>
             <div className="text-left flex-grow max-h-48 overflow-y-auto pr-4">
-                <p className="font-normal text-lg mb-1 break-words whitespace-pre-line">
-                    {product.description}
+                <p className="font-semibold text-lg mb-1 break-words whitespace-pre-line">
+                    Descripcion:<span className="font-normal"> {product.description}</span>
+                   
                 </p>
             </div>
-            <div className="flex flex-col justify-end ml-4">
+            <div className="px-5 flex flex-col justify-end">
                 <Link href={{ pathname: `/admin/dashboard/products/update/${product.id}` }}>
                     <button className="rounded-md border p-2 mb-2 hover:bg-blue-100">
                         Editar Producto
