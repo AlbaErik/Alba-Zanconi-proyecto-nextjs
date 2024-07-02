@@ -30,17 +30,14 @@ export default function Home() {
     productos.splice(indiceProductoAElimninar,1);
     setState(productos);
     setModalOpen(false);
-    close();
   }
 
   const noEliminarProductoCarrito = () => {
     setModalOpen(false);
-    close();
   }
 
   const onClose = () => {
     setModalOpen(false);
-    close();
   }
 
   function comprar(){
