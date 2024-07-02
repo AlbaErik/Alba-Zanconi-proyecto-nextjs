@@ -30,6 +30,7 @@ export default function Home() {
     productos.splice(indiceProductoAElimninar,1);
     setState(productos);
     setModalOpen(false);
+    close();
   }
 
   const noEliminarProductoCarrito = () => {
@@ -39,6 +40,7 @@ export default function Home() {
 
   const onClose = () => {
     setModalOpen(false);
+    close();
   }
 
   function comprar(){
@@ -92,7 +94,7 @@ export default function Home() {
             Comprar
           </button>
         </div>
-        <Popup onClose={() => {onClose; close() }} open={modalOpen} modal nested className="" >
+        <Popup onClose={onClose} open={modalOpen} modal nested className="" >
           {
             (close: () => void) => (
                 <div className="" style={{ border: '3px  black rounded-lg' }}>
@@ -101,11 +103,11 @@ export default function Home() {
                     </div>
                     <div className="flex justify-around">
                         <button className="text-3xl font-bold hover:text-red-600" onClick=
-                            {() => { eliminarProductoCarrito; close(); }}>
+                            {eliminarProductoCarrito}>
                                 Si
                         </button>
                         <button className="text-3xl font-bold hover:text-green-600" onClick=
-                            {() => { noEliminarProductoCarrito; close(); }}>
+                            {noEliminarProductoCarrito}>
                                 No
                         </button>
                     </div>
