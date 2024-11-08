@@ -26,6 +26,11 @@
         "sizes": "1613x894",
         "type": "image/gif",
         "form_factor": "wide"
+        },
+        {
+          "src": "screenshot.png",
+          "sizes": "1613x894",
+          "type": "image/gif"
         }
       ]
 }
