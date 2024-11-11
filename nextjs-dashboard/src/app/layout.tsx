@@ -9,7 +9,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="manifest" href="manifest.json" />
+        <meta name="Tienda virtual de tecnologia"></meta>
+        <title>ESky Tienda Virtual</title>
       </head>
       <body className="min-h-screen pt-[1%]">
         <AppWrapper>
