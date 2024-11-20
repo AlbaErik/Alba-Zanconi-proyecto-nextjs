@@ -38,3 +38,8 @@ next-env.d.ts
 
 # Service Worker
 /public/sw*
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

@@ -58,7 +58,7 @@ const CartCard: React.FC<CardProps> = ({ id, name, price, imageSrc, cantidad, se
   }
 
   return(
-  <div className="grid grid-cols-4 gap-4 rounded-lg mb-[1%] border-black border-4 py-5 px-3">
+  <div className="grid grid-cols-4 gap-4 rounded-lg mb-[1%] bg-white border-black border-4 py-5 px-3">
     <div className="flex justify-items-center">
         <Image className="card-image" src={imageSrc} alt={name} width={100} height={30}/>
     </div>

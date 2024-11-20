@@ -47,18 +47,6 @@ export const authConfig = {
       }
     
       return true;
-
-      
-      
-
-      if(isLoggedIn && userRole.localeCompare("user") && !isOnUser){
-        return Response.redirect(new URL('/user', NextRequest.nextUrl));
-      }
-      else{
-        return true;
-      }
-      
-      
     },
   },
   

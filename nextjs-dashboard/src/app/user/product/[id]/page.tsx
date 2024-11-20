@@ -80,7 +80,7 @@ export default function Home() {
     <main className="pt-[3%] px-[15%]">
       <div className="md:flex py-3 px-3 w-full">
           <div className="lg:flex mr-3 pb-[1%] pr-[5%]">
-            <Image className="card-image flex-none" src={producto.image_url} alt={producto.name} width={400} height={10}/>
+            <Image className="card-image flex-none bg-transparent" src={producto.image_url} alt={producto.name} width={400} height={10}/>
           </div>
           <div className="my-[1%] px-[1%] w-full flex flex-col rounded-lg shadow-md bg-white">
             
