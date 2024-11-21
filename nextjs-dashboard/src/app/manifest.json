@@ -1,0 +1,36 @@
+{
+    "theme_color":"#8936FF",
+    "background_color":"#2EC6FE",
+    "orientation":"any",
+    "display":"standalone",
+    "dir":"auto",
+    "lang":"en-US",
+    "name":"ESkyTiendaVirtuak",
+    "short_name":"ESky",
+    "start_url":"/",
+    "icons": [
+        {
+        "purpose":"maskable",
+        "sizes":"512x512",
+        "src":"icon512_maskable.png",
+        "type":"image/png"},
+        {
+        "purpose":"any",
+        "sizes":"512x512",
+        "src":"icon512_rounded.png",
+        "type":"image/png"}
+      ],
+      "screenshots": [    
+        {
+        "src": "screenshot.png",
+        "sizes": "1613x894",
+        "type": "image/gif",
+        "form_factor": "wide"
+        },
+        {
+          "src": "screenshot.png",
+          "sizes": "1613x894",
+          "type": "image/gif"
+        }
+      ]
+}
