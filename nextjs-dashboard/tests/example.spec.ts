@@ -60,7 +60,7 @@ test('Get product-invalid id', async ({ request }) => {
   // Realizamos la consulta GET a la API
   const response = await request.get('http:/localhost:3000/api/product?id=id-invalido');
   
-  // Verificamos que la respuesta tiene un código de estado 200
+  // Verificamos que la respuesta tiene un código de estado 404 (Not Found)
   expect(response.status()).toBe(404);
  
 });
@@ -69,7 +69,7 @@ test('Get product- id not specified', async ({ request }) => {
   // Realizamos la consulta GET a la API
   const response = await request.get('http:/localhost:3000/api/product');
   
-  // Verificamos que la respuesta tiene un código de estado 200
+  // Verificamos que la respuesta tiene un código de estado 500 (Error interno del servidor)
   expect(response.status()).toBe(500);
  
 });
