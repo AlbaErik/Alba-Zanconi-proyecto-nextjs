@@ -121,7 +121,7 @@ export default function Home() {
 
   return (
     
-    <main className="flex min-h-screen flex-col items-center justify-between pt-[3%] pl-[10%] pr-[10%]">
+    <main className="flex flex-col items-center justify-between pt-[2%] pl-[10%] pr-[10%]">
       <div className="w-full">
         <div id="productos" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full">
         {
@@ -141,7 +141,7 @@ export default function Home() {
         </div>
       </div>
       
-      <ReactPaginate className="flex gap-5 mb-5 pt-5"
+      <ReactPaginate className="flex gap-5 mb-5 pt-10 pb-10"
         previousLabel={null}
         nextLabel={null}
         breakLabel={'...'}

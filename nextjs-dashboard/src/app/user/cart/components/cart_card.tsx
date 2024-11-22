@@ -63,21 +63,35 @@ const CartCard: React.FC<CardProps> = ({ id, name, price, imageSrc, cantidad, se
         <Image className="card-image" src={imageSrc} alt={name} width={100} height={30}/>
     </div>
     
-    <div className="flex items-center justify-center text-xl font-semibold tracking-tight text-gray-900 ">
+    <div className="flex items-center justify-center text-center text-xl font-semibold text-gray-900">
         {name}
     </div>
 
-    <div className="flex items-center justify-center text-3xl font-bold text-gray-900 ">{"$"+price}</div>
+    <div className="flex items-center justify-center text-3xl font-bold text-gray-900">{"$"+price}</div>
     
     <div className="flex items-center justify-evenly">
-        <button onClick={addProduct} className="flex overflow-hidden items-center justify-center text-5xl font-bold text-gray-900 hover:bg-green-500 rounded-lg h-8">
-            +
+        <button onClick={addProduct} className="flex py-5 px-4 overflow-hidden items-center justify-center text-5xl font-bold text-gray-900 hover:bg-green-500 rounded-lg h-8">
+          <Image
+            className=""
+            src="/addition.png"
+            alt="Logo"
+            width={40}
+            height={40}
+            priority>
+          </Image>
         </button>
         <div className="flex items-center justify-center text-4xl font-bold text-gray-900 tracking-tight  h-8">
             {cantidad}
         </div>
-        <button onClick={removeProduct} className="flex overflow-hidden items-center justify-center text-3xl font-bold text-gray-900 hover:bg-red-500 rounded-lg h-8">
-            -
+        <button onClick={removeProduct} className="flex p-5 overflow-hidden items-center justify-center text-3xl font-bold text-gray-900 hover:bg-red-500 rounded-lg h-8">
+          <Image
+            className=""
+            src="/substraction.png"
+            alt="Logo"
+            width={20}
+            height={20}
+            priority>
+          </Image>
         </button>
     </div>
     

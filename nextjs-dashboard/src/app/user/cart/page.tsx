@@ -69,9 +69,6 @@ export default function Home() {
 
     return (
       <main className="pt-[1%]">
-        <div className="text-center text-5xl">
-          Carrito
-        </div>
         <div className="pt-[1%] w-3/4 sm:w-1/2 mx-auto">
           {productos.map((_, index) => (
           <CartCard

@@ -17,7 +17,7 @@ test('get started link', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
 });
 
-test('Get products-success', async ({ request }) => {
+test('Get products - success', async ({ request }) => {
   // Realizamos la consulta GET a la API
   const response = await request.get('http:/localhost:3000/api/products');
   
@@ -39,7 +39,7 @@ test('Get products-success', async ({ request }) => {
   expect(productos.length).toBeGreaterThan(0);
 });
 
-test('Get product-success', async ({ request }) => {
+test('Get product - success', async ({ request }) => {
   // Realizamos la consulta GET a la API
   const response = await request.get('http:/localhost:3000/api/product?id=31bcec1b-6933-4a13-84aa-7b60dd50ac3e');
   
@@ -56,7 +56,7 @@ test('Get product-success', async ({ request }) => {
  
 });
 
-test('Get product-invalid id', async ({ request }) => {
+test('Get product - invalid id', async ({ request }) => {
   // Realizamos la consulta GET a la API
   const response = await request.get('http:/localhost:3000/api/product?id=id-invalido');
   
@@ -65,7 +65,7 @@ test('Get product-invalid id', async ({ request }) => {
  
 });
 
-test('Get product- id not specified', async ({ request }) => {
+test('Get product - id not specified', async ({ request }) => {
   // Realizamos la consulta GET a la API
   const response = await request.get('http:/localhost:3000/api/product');
   
