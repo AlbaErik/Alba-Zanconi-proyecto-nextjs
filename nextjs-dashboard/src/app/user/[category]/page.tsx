@@ -38,7 +38,7 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/products?category_name="+params.category);
+        const response = await fetch("/api/products/category/"+params.category);
         const data = await response.json();
         if(data.length>0){
           setCantPaginas(Math.ceil(data.length/CANTIDAD_PRODUCTOS_MOSTRADOS));
