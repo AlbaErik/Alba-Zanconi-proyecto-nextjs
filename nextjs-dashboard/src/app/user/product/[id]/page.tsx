@@ -65,7 +65,7 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/product?id="+params.id);
+        const response = await fetch("/api/products/id/"+params.id);
         const data = await response.json();
         setProducto(data);
       } catch (error) {
