@@ -25,7 +25,7 @@ export async function POST(req: Request, res: NextResponse){
       });
     }
     else{
-      return new Response(JSON.stringify({ error: 'Error : Pago invalido'}), {
+      return new Response(JSON.stringify(responseData), {
         headers: { 'Content-Type': 'application/json' },
         status: 500,
       });

@@ -1,21 +1,5 @@
 import { test, expect } from '@playwright/test';
-
-test('has title', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
-
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/);
-});
-
-test('get started link', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
-
-  // Click the get started link.
-  await page.getByRole('link', { name: 'Get started' }).click();
-
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
-});
+import { ProductoEnCarrito } from "@/app/context";
 
 test('Get products - success', async ({ request }) => {
   // Realizamos la consulta GET a la API
@@ -100,5 +84,97 @@ test('Get products/id/ - invalid id', async ({ request }) => {
   
   // Verificamos que la respuesta tiene un código de estado 404 (Not Found)
   expect(response.status()).toBe(404);
+ 
+});
+
+test('Get checkout - success', async ({ request }) => {
+  const productos: ProductoEnCarrito[] = [
+    {
+      id: "12345",
+      title: "Camiseta Deportiva",
+      description: "Camiseta ideal para entrenamientos de alta intensidad.",
+      unit_price: 29.99,
+      picture_url: "https://example.com/images/camiseta.jpg",
+      category_id: "ropa-deportiva",
+      quantity: 1,
+    },
+    {
+      id: "67890",
+      title: "Pantalones de Yoga",
+      description: "Pantalones cómodos para yoga y actividades de relajación.",
+      unit_price: 49.99,
+      picture_url: "https://example.com/images/pantalones.jpg",
+      category_id: "ropa-deportiva",
+      quantity: 2,
+    },
+  ];
+  const items = "{ items:"+JSON.stringify(productos)+" }"
+  const response = await fetch('http:/localhost:3000/api/checkout',{
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: items
+  });
+
+  var body = await response.json();
+  console.log(body)
+
+  expect(response.status).toBe(201);
+ 
+});
+
+test('Get checkout - invalid product', async ({ request }) => {
+  const productos: ProductoEnCarrito[] = [
+    {
+      id: "12345",
+      title: "Camiseta Deportiva",
+      description: "Camiseta ideal para entrenamientos de alta intensidad.",
+      unit_price: 29.99,
+      picture_url: "https://example.com/images/camiseta.jpg",
+      category_id: "ropa-deportiva",
+      quantity: -1,
+    },
+    {
+      id: "67890",
+      title: "Pantalones de Yoga",
+      description: "Pantalones cómodos para yoga y actividades de relajación.",
+      unit_price: 49.99,
+      picture_url: "https://example.com/images/pantalones.jpg",
+      category_id: "ropa-deportiva",
+      quantity: 2,
+    },
+  ];
+  const items = "{ items:"+JSON.stringify(productos)+" }"
+  const response = await fetch('http:/localhost:3000/api/checkout',{
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: items
+  });
+
+  var body = await response.json();
+  console.log(body)
+
+  expect(response.status).toBe(500);
+ 
+});
+
+test('Get checkout - no products', async ({ request }) => {
+  const productos: ProductoEnCarrito[] = [];
+  const items = "{ items:"+JSON.stringify(productos)+" }"
+  const response = await fetch('http:/localhost:3000/api/checkout',{
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: items
+  });
+
+  var body = await response.json();
+  console.log(body)
+
+  expect(response.status).toBe(500);
  
 });
