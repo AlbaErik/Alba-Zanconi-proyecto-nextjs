@@ -221,7 +221,7 @@ export default function Form({
                                 className="flex items-center text-3xl font-bold text-blue-600 hover:text-blue-800 transition-colors"
                                 onClick={handleSubmit}
                             >
-                                Sí
+                                Si
                             </button>
                             <button
                                 className="flex items-center text-3xl font-bold text-red-600 hover:text-red-800 transition-colors"

@@ -92,7 +92,7 @@ function ProductCard({ product }: { product: ProductWithCategory }) {
                                     className="flex items-center text-3xl font-bold text-red-600 hover:text-red-800 transition-colors"
                                     onClick={handleConfirmDelete}
                                 >
-                                    Sí
+                                    Si
                                 </button>
                                 <button
                                     className="flex items-center text-3xl font-bold text-green-600 hover:text-green-800 transition-colors"
