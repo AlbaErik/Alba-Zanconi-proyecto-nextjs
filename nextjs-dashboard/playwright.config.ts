@@ -1,8 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
+import fs from 'fs';
 
 /**
  * Read environment variables from file.
- * https://github.com/motdotla/dotenv
  */
 // import dotenv from 'dotenv';
 // import path from 'path';
@@ -11,6 +11,13 @@ import { defineConfig, devices } from '@playwright/test';
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
+
+// Verificar si `auth.json` existe; si no, ejecuta el setup de autenticación
+if (!fs.existsSync('auth.json')) {
+  console.warn('⚠️  No se encontró auth.json. Generando sesión...');
+  require('child_process').execSync('npx playwright test setup.spec.ts', { stdio: 'inherit' });
+}
+
 export default defineConfig({
   testDir: './tests',
   /* Run tests in files in parallel */
@@ -21,21 +28,21 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
+  /* Reporter to use. */
   reporter: 'html',
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+  /* Shared settings for all the projects below. */
   use: {
-    /* Base URL to use in actions like `await page.goto('/')`. */
+    /* Base URL */
     // baseURL: 'http://127.0.0.1:3000',
 
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    /* Mantener sesión iniciada */
+    storageState: 'auth.json',
+
+    /* Collect trace when retrying the failed test. */
     trace: 'on-first-retry',
     baseURL: 'https://api.github.com',
     extraHTTPHeaders: {
-      // We set this header per GitHub guidelines.
       'Accept': 'application/vnd.github.v3+json',
-      // Add authorization token to all requests.
-      // Assuming personal access token available in the environment.
       'Authorization': `token ${process.env.API_TOKEN}`,
     },
   },
@@ -46,42 +53,13 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-
     {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
     },
-
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
     },
-
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    // },
   ],
-
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://127.0.0.1:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
 });
