@@ -62,7 +62,6 @@ test('Editar un producto tras iniciar sesión', async ({ page }) => {
 
   //Obtengo la primer Card de la lista
   const card = await page.locator('.rounded-xl.bg-blue-50').first();
-  const firstCardTitle = await card.locator('h3.ml-2.text-sm.font-medium').textContent() || "";
   await card.locator('button:has-text("Editar Producto")').click();
 
   // Completo los datos del formulario
@@ -96,3 +95,59 @@ test('Editar un producto tras iniciar sesión', async ({ page }) => {
   await page.screenshot({ path: 'screenshot.png', fullPage: true });
 
 });
+
+
+test('Eliminar un producto y verificar que no exista en la búsqueda', async ({ page }) => {
+  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard/products');
+  await page.screenshot({ path: 'primerCard.png', fullPage: true });
+
+  // Obtengo la primera Card de la lista
+  const card = await page.locator('.rounded-xl.bg-blue-50').first();
+  const firstCardTitle = await card.locator('h3.ml-2.text-sm.font-medium').textContent() || "";
+
+  // Obtengo el UUID del producto desde el enlace "Editar Producto"
+  const editButton = await card.locator('a[href*="/admin/dashboard/products/update/"]');
+  const productHref = await editButton.getAttribute('href') || "";
+  const uuidMatch = productHref.match(/update\/([a-f0-9-]+)/);
+  const productUUID = uuidMatch ? uuidMatch[1] : null;
+
+  if (!productUUID) {
+    throw new Error("No se pudo obtener el UUID del producto.");
+  }
+
+  console.log(`Eliminando producto: ${firstCardTitle} (UUID: ${productUUID})`);
+
+  // Hacer clic en "Borrar Producto"
+  await card.locator('button:has-text("Borrar Producto")').click();
+
+  // Confirmar eliminación
+  await page.locator('button:text("Si")').waitFor();
+  await page.locator('button:text("Si")').click();
+
+  // Esperar a que la Card desaparezca
+  await page.waitForTimeout(5000);
+
+  // Usar el buscador para buscar el producto eliminado
+  console.log(`🔍 Buscando productos con el título: "${firstCardTitle}"`);
+  await page.fill('input[placeholder="Ingrese un producto..."]', firstCardTitle);
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(2000); // Esperar a que los resultados se actualicen
+
+  await page.screenshot({ path: 'CardEliminada.png', fullPage: true });
+
+  // Verificar que ningún producto encontrado tenga el UUID eliminado
+  const foundCards = await page.locator('.rounded-xl.bg-blue-50').all();
+  for (const foundCard of foundCards) {
+    const editButton = await foundCard.locator('a[href*="/admin/dashboard/products/update/"]');
+    const foundHref = await editButton.getAttribute('href') || "";
+    const foundUUIDMatch = foundHref.match(/update\/([a-f0-9-]+)/);
+    const foundUUID = foundUUIDMatch ? foundUUIDMatch[1] : null;
+
+    console.log(`🔍 Revisando producto encontrado - UUID: ${foundUUID}`);
+
+    expect(foundUUID).not.toBe(productUUID);
+  }
+
+  console.log(`✅ Producto eliminado correctamente y no se encontró en la búsqueda: ${firstCardTitle} (UUID: ${productUUID})`);
+});
+
