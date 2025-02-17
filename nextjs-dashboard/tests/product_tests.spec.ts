@@ -1,16 +1,15 @@
 import { test, expect } from '@playwright/test';
-import { title } from 'process';
-import { string } from 'zod';
-
 
 /*
   Tests de éxito y fracaso en altas, bajas y modificaciones: 
   crear, 
-  editar y elminar un producto exitosamente, 
-  falla en creación o modificación de un producto (por campos inválidos o faltantes), 
-  falla en eliminacion de un producto (tal vez por URL alterada), 
+  editar 
+  y elminar un producto exitosamente, 
   ver listas de productos, 
   ver detalles de un producto, 
+  falla en creación o modificación de un producto (por campos inválidos o faltantes), 
+  falla en eliminacion de un producto (tal vez por URL alterada), 
+  
   login exitoso y fallido, 
   acceso a paginas restringidas, 
   entre otros.
@@ -115,7 +114,7 @@ test('Eliminar un producto y verificar que no exista en la búsqueda', async ({ 
     throw new Error("No se pudo obtener el UUID del producto.");
   }
 
-  console.log(`Eliminando producto: ${firstCardTitle} (UUID: ${productUUID})`);
+  console.log('Eliminando producto: ${firstCardTitle} (UUID: ${productUUID})');
 
   // Hacer clic en "Borrar Producto"
   await card.locator('button:has-text("Borrar Producto")').click();
@@ -128,7 +127,7 @@ test('Eliminar un producto y verificar que no exista en la búsqueda', async ({ 
   await page.waitForTimeout(5000);
 
   // Usar el buscador para buscar el producto eliminado
-  console.log(`🔍 Buscando productos con el título: "${firstCardTitle}"`);
+  console.log('Buscando productos con el título: "${firstCardTitle}"');
   await page.fill('input[placeholder="Ingrese un producto..."]', firstCardTitle);
   await page.keyboard.press('Enter');
   await page.waitForTimeout(2000); // Esperar a que los resultados se actualicen
@@ -143,11 +142,95 @@ test('Eliminar un producto y verificar que no exista en la búsqueda', async ({ 
     const foundUUIDMatch = foundHref.match(/update\/([a-f0-9-]+)/);
     const foundUUID = foundUUIDMatch ? foundUUIDMatch[1] : null;
 
-    console.log(`🔍 Revisando producto encontrado - UUID: ${foundUUID}`);
+    console.log(' Revisando producto encontrado - UUID: ${foundUUID}');
 
     expect(foundUUID).not.toBe(productUUID);
   }
 
-  console.log(`✅ Producto eliminado correctamente y no se encontró en la búsqueda: ${firstCardTitle} (UUID: ${productUUID})`);
+  console.log(' Producto eliminado correctamente y no se encontró en la búsqueda: ${firstCardTitle} (UUID: ${productUUID})');
 });
 
+
+test('Ver lista de productos', async ({ page }) => {
+  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard/products');
+
+  // Esperar a que carguen los productos
+  await page.waitForSelector('.rounded-xl.bg-blue-50');
+
+  // Contar cuántos productos hay en la lista
+  const productCards = await page.locator('.rounded-xl.bg-blue-50').count();
+
+  console.log(' Se encontraron ${productCards} productos en la lista.');
+  expect(productCards).toBeGreaterThan(0);
+
+});
+
+
+test('Obtener detalles del primer producto en la lista', async ({ page }) => {
+  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard/products');
+
+  // Obtener la primera Card de la lista
+  const firstCard = await page.locator('.rounded-xl.bg-blue-50').first();
+
+  // Obtener los detalles del producto
+  const title = await firstCard.locator('h3.ml-2.text-sm.font-medium').textContent() || "";
+  const category = await firstCard.locator('p:has-text("Categoria:") span').textContent() || "";
+  const price = await firstCard.locator('p:has-text("Precio:") span').textContent() || "";
+  const description = await firstCard.locator('p:has-text("Descripcion:") span').textContent() || "";
+
+  console.log('Producto encontrado:');
+  console.log(' Título: ${title}');
+  console.log(' Categoría: ${category}');
+  console.log(' Precio: ${price}');
+  console.log(' Descripción: ${description}');
+
+  // Verificar que todos los campos tengan valores
+  expect(title).not.toBe("");
+  expect(category).not.toBe("");
+  expect(price).not.toBe("");
+  expect(description).not.toBe("");
+});
+
+
+test('Error al crear un producto sin seleccionar imagen', async ({ page }) => {
+  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard/products/create');
+
+  // Hacer clic en el botón de crear producto sin seleccionar una imagen
+  await page.locator('button:has-text("Create Product")').click();
+
+  // Verificar que aparece el mensaje de error sobre la imagen
+  const errorImage = page.locator('p.text-red-500:has-text("Por favor seleccione una imagen antes de crear el producto.")');
+  await expect(errorImage).toBeVisible();
+});
+
+test('Error al crear un producto sin completar todos los campos', async ({ page }) => {
+  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard/products/create');
+
+  // Subir una imagen local
+  const filePath = 'D:/IAW/Alba-Zanconi-proyecto-nextjs/nextjs-dashboard/public/logo.png';
+  await page.setInputFiles('#file', filePath);
+
+  // Hacer clic en el botón de crear producto sin completar otros campos
+  await page.locator('button:has-text("Create Product")').click();
+
+  // Verificar que aparece el mensaje de error sobre los campos faltantes
+  const errorFields = page.locator('p.text-red-500:has-text("Por favor complete todos los campos antes de crear el producto.")');
+  await expect(errorFields).toBeVisible();
+});
+
+
+test('Falla al eliminar un producto con URL alterada (404)', async ({ page }) => {
+  // Ir a la página de productos
+  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard/products');
+
+  // Alterar la URL con un UUID inválido
+  const uuidAlterado = '00000000-0000-0000-0000-000000000000';
+  const deleteUrl = `https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard/products/delete/${uuidAlterado}`;
+
+  // Intentar acceder a la URL falsa
+  await page.goto(deleteUrl);
+
+  // Verificar que la página muestra un error 404
+  await expect(page).toHaveTitle(/404/i);
+  await expect(page.locator('text=This page could not be found')).toBeVisible();
+});
