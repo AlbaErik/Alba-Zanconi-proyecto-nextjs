@@ -1,38 +1,28 @@
 import { test, expect } from '@playwright/test';
+import path from 'path';
 
-/*
-  Tests de éxito y fracaso en altas, bajas y modificaciones: 
-  crear, 
-  editar 
-  y elminar un producto exitosamente, 
-  ver listas de productos, 
-  ver detalles de un producto, 
-  falla en creación o modificación de un producto (por campos inválidos o faltantes), 
-  falla en eliminacion de un producto (tal vez por URL alterada), 
-  
-  login exitoso y fallido, 
-  acceso a paginas restringidas, 
-  entre otros.
-*/
+test.use({ storageState: 'auth.json' });
+function generarCadenaAleatoriaTS(longitud: number = 5): string {
+  const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  return Array.from({ length: longitud }, () => caracteres[Math.floor(Math.random() * caracteres.length)]).join('');
+}
 
-test('Crear un producto tras iniciar sesión', async ({ page }) => {
+console.log(generarCadenaAleatoriaTS());
 
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard');
-  await page.screenshot({ path: 'screenshot.png', fullPage: true });
+test('Crear un producto tras iniciar sesion', async ({ page }) => {
 
   // Ir a la página de creación de productos
   await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard/products/create');
 
-
-  const productName = '123 Nuevo Producto con Playwright';
-  await page.screenshot({ path: 'screenshot-asdf.png', fullPage: true });
+  const productName = 'Nuevo Producto con Playwright Fallout ' + generarCadenaAleatoriaTS();
 
   await page.fill('#name', productName);
   await page.fill('#description', 'Es un nuevo producto creado con Playwright');
   await page.fill('#price', '100');
 
-  const filePath = 'D:/IAW/Alba-Zanconi-proyecto-nextjs/nextjs-dashboard/public/logo.png';
+  const filePath = path.join(process.cwd(), 'nextjs-dashboard', 'tests', 'fallout.jpeg');
   await page.setInputFiles('#file', filePath);
+
   await page.selectOption('#category_id', { label: 'Tarjetas Gráficas' });
 
   await page.click('button:has-text("Create Product")');
@@ -42,20 +32,18 @@ test('Crear un producto tras iniciar sesión', async ({ page }) => {
   await page.waitForURL('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard/products');
 
   // Buscar el producto
+  console.log("El producto nuevo es: " + productName);
   const searchInput = page.locator('input[placeholder="Ingrese un producto..."]');
-  await searchInput.fill("Nuevo Producto con Playwright");
+  await searchInput.fill(productName);
   await searchInput.press("Enter");
 
-
   const productLocator = page.locator('div.rounded-xl.bg-blue-50').first();
-  await expect(productLocator).toContainText("Nuevo Producto con Playwright");
-
-  await page.screenshot({ path: 'screenshot.png', fullPage: true });
+  await expect(productLocator).toContainText(productName);
 
 });
 
 
-test('Editar un producto tras iniciar sesión', async ({ page }) => {
+test('Editar un producto tras iniciar sesion', async ({ page }) => {
 
   await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard/products');
 
@@ -72,8 +60,9 @@ test('Editar un producto tras iniciar sesión', async ({ page }) => {
   await page.fill('#description', description);
   await page.fill('#price', price);
 
-  const filePath = 'D:/IAW/Alba-Zanconi-proyecto-nextjs/nextjs-dashboard/public/logo.png';
+  const filePath = path.join(process.cwd(), 'nextjs-dashboard', 'tests', 'fallout.jpeg');
   await page.setInputFiles('#file', filePath);
+
   await page.selectOption('#category_id', { label: 'Tarjetas Gráficas' });
 
   //Guardo cambios y confirmo
@@ -91,14 +80,11 @@ test('Editar un producto tras iniciar sesión', async ({ page }) => {
 
   const productLocator = page.locator('div.rounded-xl.bg-blue-50').first();
   await expect(productLocator).toContainText(productName);
-  await page.screenshot({ path: 'screenshot.png', fullPage: true });
-
 });
 
 
-test('Eliminar un producto y verificar que no exista en la búsqueda', async ({ page }) => {
+test('Eliminar un producto y verificar que no exista en la busqueda', async ({ page }) => {
   await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard/products');
-  await page.screenshot({ path: 'primerCard.png', fullPage: true });
 
   // Obtengo la primera Card de la lista
   const card = await page.locator('.rounded-xl.bg-blue-50').first();
@@ -130,9 +116,7 @@ test('Eliminar un producto y verificar que no exista en la búsqueda', async ({ 
   console.log('Buscando productos con el título: "${firstCardTitle}"');
   await page.fill('input[placeholder="Ingrese un producto..."]', firstCardTitle);
   await page.keyboard.press('Enter');
-  await page.waitForTimeout(2000); // Esperar a que los resultados se actualicen
-
-  await page.screenshot({ path: 'CardEliminada.png', fullPage: true });
+  await page.waitForTimeout(2000);
 
   // Verificar que ningún producto encontrado tenga el UUID eliminado
   const foundCards = await page.locator('.rounded-xl.bg-blue-50').all();
@@ -162,7 +146,6 @@ test('Ver lista de productos', async ({ page }) => {
 
   console.log(' Se encontraron ${productCards} productos en la lista.');
   expect(productCards).toBeGreaterThan(0);
-
 });
 
 
@@ -207,7 +190,7 @@ test('Error al crear un producto sin completar todos los campos', async ({ page 
   await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard/products/create');
 
   // Subir una imagen local
-  const filePath = 'D:/IAW/Alba-Zanconi-proyecto-nextjs/nextjs-dashboard/public/logo.png';
+  const filePath = path.join(process.cwd(), 'nextjs-dashboard', 'tests', 'fallout.jpeg');
   await page.setInputFiles('#file', filePath);
 
   // Hacer clic en el botón de crear producto sin completar otros campos

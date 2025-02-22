@@ -1,4 +1,7 @@
 import { test, expect } from '@playwright/test';
+test.describe.configure({ mode: 'parallel' });
+test.use({ storageState: 'auth.json' });
+
 
 test('Login exitoso con credenciales válidas', async ({ page }) => {
 
