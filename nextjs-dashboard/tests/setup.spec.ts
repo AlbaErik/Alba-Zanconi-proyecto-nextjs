@@ -13,5 +13,5 @@ test('Guardar sesión', async ({ page }) => {
   await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard');
 
   // Guardar el estado de la sesión
-  await page.context().storageState({ path: 'auth.json' });
+  await page.context().storageState({ path: 'nextjs-dashboard/tests/auth.json' });
 });

@@ -1,14 +1,8 @@
 import { test, expect, Page } from '@playwright/test';
 test.describe.configure({ mode: 'parallel' });
-test.use({ storageState: 'auth.json' });
 
 test('Usuarios anónimos pueden ver los productos', async ({ page }) => {
-    // Logout del admin
-    await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard');
-
-    await page.getByRole('button', { name: 'Sign Out' }).click();
-    await page.waitForTimeout(5000);
-
+   
     await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
 
     // Completar el formulario de login
@@ -25,13 +19,7 @@ test('Usuarios anónimos pueden ver los productos', async ({ page }) => {
 });
 
 test('Usuarios anónimos no pueden acceder al dashboard del admin', async ({ page }) => {
-
-    // Logout del admin
-    await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard');
-
-    await page.getByRole('button', { name: 'Sign Out' }).click();
-    await page.waitForTimeout(5000);
-
+    
     await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/user');
 
     //Intenta acceder al dashboard del admin
@@ -42,12 +30,8 @@ test('Usuarios anónimos no pueden acceder al dashboard del admin', async ({ pag
 });
 
 test('Cliente autenticado no puede acceder al dashboard del admin', async ({ page }) => {
-    // Logout del admin
-    await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard');
-
-    await page.getByRole('button', { name: 'Sign Out' }).click();
-
-    await page.click('a.text-gray-600:has-text("Ingresar")');
+   
+    await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
 
     // Completar el formulario de login
     await page.fill('input[name="email"]', 'user1@example.com');

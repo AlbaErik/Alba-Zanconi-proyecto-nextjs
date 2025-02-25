@@ -1,16 +1,14 @@
 import { test, expect } from '@playwright/test';
 test.describe.configure({ mode: 'parallel' });
-test.use({ storageState: 'auth.json' });
+test.use({ storageState: undefined });
 
 
 test('Login exitoso con credenciales válidas', async ({ page }) => {
 
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard');
-
-  await page.getByRole('button', { name: 'Sign Out' }).click();
-  await page.waitForTimeout(5000);
-
   await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
+
+  await page.waitForTimeout(5000);
+  await page.screenshot({ path: 'screenshotAuth.png', fullPage: true });
 
   // Completar el formulario de login
   await page.fill('input[name="email"]', 'admin@admin.com');
@@ -24,10 +22,6 @@ test('Login exitoso con credenciales válidas', async ({ page }) => {
 
 
 test('Login clave incorrecta', async ({ page }) => {
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard');
-
-  await page.getByRole('button', { name: 'Sign Out' }).click();
-  await page.waitForTimeout(5000);
 
   await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
 
@@ -50,11 +44,7 @@ test('Login clave incorrecta', async ({ page }) => {
 
 test('Login usuario incorrecto', async ({ page }) => {
 
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard');
-
-  await page.getByRole('button', { name: 'Sign Out' }).click();
-  await page.waitForTimeout(5000);
-  await page.click('a.text-gray-600:has-text("Ingresar")');
+  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
 
   // Completar el formulario de login
   await page.fill('input[name="email"]', 'aasdfasf@admin.com');

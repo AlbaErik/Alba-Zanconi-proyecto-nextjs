@@ -1,5 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 import fs from 'fs';
+import { execSync } from 'child_process';
+
 
 /**
  * Read environment variables from file.
@@ -13,10 +15,14 @@ import fs from 'fs';
  */
 
 // Verificar si `auth.json` existe; si no, ejecuta el setup de autenticación
+
+/*
 if (!fs.existsSync('auth.json')) {
   console.warn('⚠️  No se encontró auth.json. Generando sesión...');
-  require('child_process').execSync('npx playwright test setup.spec.ts', { stdio: 'inherit' });
+  require('child_process').execSync('npx playwright test tests/setup.spec.ts', { stdio: 'inherit' });
 }
+  */
+
 
 export default defineConfig({
   testDir: './tests',
@@ -36,7 +42,9 @@ export default defineConfig({
     // baseURL: 'http://127.0.0.1:3000',
 
     /* Mantener sesión iniciada */
-    storageState: 'auth.json',
+
+    //storageState: process.env.USE_AUTH ? 'nextjs-dashboard/tests/auth.json' : undefined,
+
 
     /* Collect trace when retrying the failed test. */
     trace: 'on-first-retry',
