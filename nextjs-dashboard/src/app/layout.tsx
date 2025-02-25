@@ -4,7 +4,7 @@ import { AppWrapper } from "./context";
 import type { Metadata, Viewport } from "next";
 
 const APP_NAME = "PWA App";
-const APP_DEFAULT_TITLE = "My Awesome PWA App";
+const APP_DEFAULT_TITLE = "ESKY Tienda Virtual";
 const APP_TITLE_TEMPLATE = "%s - PWA App";
 const APP_DESCRIPTION = "Best PWA app in the world!";
 
