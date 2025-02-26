@@ -7,15 +7,23 @@ export async function GET(request: Request,{ params }: { params: Promise<{ categ
   try{
       
     var categoria = await fetchIdCategoryByName(category_name);
-    var productos = await fetchProductsByCategory(categoria[0]);
-
-    return new Response(JSON.stringify(productos), {
-      headers: { 'Content-Type': 'application/json' }
-   });
 
   }
   catch(error){
     return new Response(JSON.stringify({ error: 'Error 404 not found: Categoria no encontrada '}), {
+      status: 404,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
+  try{
+    var productos = await fetchProductsByCategory(categoria[0]);
+    return new Response(JSON.stringify(productos), {
+      headers: { 'Content-Type': 'application/json' }
+   });
+  }
+  catch(error){
+    return new Response(JSON.stringify({ error: 'Error 404 not found: No se encontraron productos con esa categoria'}), {
       status: 404,
       headers: { 'Content-Type': 'application/json' }
     });

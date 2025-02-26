@@ -1,4 +1,5 @@
 import { sql } from '@vercel/postgres';
+import { error } from 'console';
 import { unstable_noStore as noStore } from 'next/cache';
 
 export type Product = {
@@ -366,6 +367,7 @@ export async function fetchProductsByCategory(categoryId: string): Promise<Produ
         WHERE category_id = ${categoryId}
       `;
         // Mapea los resultados a un array de objetos Product
+        console.log(data.rows);
         const categoria = await fetchCategoryById(data.rows[0].category_id)
         const products: ProductWithCategory[] = data.rows.map(row => ({
             id: row.id,
