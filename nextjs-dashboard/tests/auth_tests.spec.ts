@@ -5,7 +5,7 @@ test.use({ storageState: undefined });
 
 test('Login exitoso con credenciales válidas', async ({ page }) => {
 
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
+  await page.goto('http:/localhost:3000/account/adminLogin');
 
   await page.waitForTimeout(5000);
   await page.screenshot({ path: 'screenshotAuth.png', fullPage: true });
@@ -16,14 +16,14 @@ test('Login exitoso con credenciales válidas', async ({ page }) => {
   await page.click('button:has-text("Log in")');
 
   // Verificar que el usuario fue redirigido al dashboard
-  await expect(page).toHaveURL('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
+  await expect(page).toHaveURL('http:/localhost:3000/account/adminLogin');
 });
 
 
 
 test('Login clave incorrecta', async ({ page }) => {
 
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
+  await page.goto('http:/localhost:3000/account/adminLogin');
 
   // Completar el formulario de login
   await page.fill('input[name="email"]', 'admin@admin.com');
@@ -44,7 +44,7 @@ test('Login clave incorrecta', async ({ page }) => {
 
 test('Login usuario incorrecto', async ({ page }) => {
 
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
+  await page.goto('http:/localhost:3000/account/adminLogin');
 
   // Completar el formulario de login
   await page.fill('input[name="email"]', 'aasdfasf@admin.com');
