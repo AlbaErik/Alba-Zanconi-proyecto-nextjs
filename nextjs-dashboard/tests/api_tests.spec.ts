@@ -59,7 +59,7 @@ test('Get products/category/ - invalid category', async ({ request }) => {
 
 test('Get products/id/ - success', async ({ request }) => {
   // Realizamos la consulta GET a la API
-  const productId = 'c82060c2-ae02-4e0c-96ee-702e47996c5e';
+  const productId = '39ae3f48-69de-4264-9add-668a8eda59b5';
   const response = await request.get(`http://localhost:3000/api/products/id/${productId}`);
   
   // Verificamos que la respuesta tiene un código de estado 200
