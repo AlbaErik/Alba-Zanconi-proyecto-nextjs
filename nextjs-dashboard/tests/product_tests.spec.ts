@@ -7,22 +7,24 @@ function generarCadenaAleatoriaTS(longitud: number = 5): string {
   return Array.from({ length: longitud }, () => caracteres[Math.floor(Math.random() * caracteres.length)]).join('');
 }
 
-//console.log(generarCadenaAleatoriaTS());
 
-test('Crear un producto tras iniciar sesion', async ({ page }) => {
+test('Crear un producto tras iniciar sesion', async ({ page, context }) => {
+  //await page.click('button:has-text("Sing Out" )');
+
   //Login
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
+  await page.goto('http:/localhost:3000/account/adminLogin');
 
   await page.fill('input[name="email"]', process.env.ADMIN_USER || 'admin@admin.com');
   await page.fill('input[name="password"]', process.env.ADMIN_PASS || 'admin');
   await page.click('button:has-text("Log in")');
   await page.waitForTimeout(3000);
-  await page.waitForURL('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
+  await page.waitForURL('http:/localhost:3000/account/adminLogin');
 
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard');
+  await page.goto('http:/localhost:3000/admin/dashboard');
 
   // Ir a la página de creación de productos
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard/products/create');
+  await page.goto('http:/localhost:3000/admin/dashboard/products/create');
+  await page.screenshot({ path: 'screenshotCrear product.png', fullPage: true });
 
   const productName = 'Nuevo Producto con Playwright Fallout ' + generarCadenaAleatoriaTS();
 
@@ -36,38 +38,59 @@ test('Crear un producto tras iniciar sesion', async ({ page }) => {
   await page.selectOption('#category_id', { label: 'Tarjetas Gráficas' });
 
   await page.click('button:has-text("Create Product")');
-  await page.click('button.flex.items-center.text-3xl.font-bold.text-blue-600');
-  await page.waitForTimeout(5000);
+  await page.locator('button:text("Si")').waitFor();
+  await page.locator('button:text("Si")').click();
+  await page.waitForTimeout(3000);
 
-  await page.waitForURL('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard/products');
+  await page.waitForURL('http:/localhost:3000/admin/dashboard/products');
 
   // Buscar el producto
-  console.log("El producto nuevo es: " + productName);
   const searchInput = page.locator('input[placeholder="Ingrese un producto..."]');
   await searchInput.fill(productName);
   await searchInput.press("Enter");
 
-  const productLocator = page.locator('div.rounded-xl.bg-blue-50').first();
-  await expect(productLocator).toContainText(productName);
+  await page.waitForTimeout(5000);
 
+  // Obtener todos los elementos que coinciden con la búsqueda
+  const productLocators = page.locator('div.rounded-xl.bg-blue-50');
+  const productCount = await productLocators.count();
+
+  let productFound = false;
+
+  // Iterar sobre todos los elementos
+  for (let i = 0; i < productCount; i++) {
+    const currentProduct = productLocators.nth(i);
+    const productText = await currentProduct.innerText();
+
+    // Verificar si el texto del producto coincide con el nombre buscado
+    if (productText.includes(productName)) {
+      productFound = true;
+      break; // Encuentra una coincidencia
+    }
+  }
+
+  await expect(productFound).toBeTruthy();
+
+  await context.clearCookies();
+  await context.clearPermissions();
 });
 
 
-test('Editar un producto tras iniciar sesion', async ({ page }) => {
+test('Editar un producto tras iniciar sesion', async ({ page, context }) => {
 
   //Login
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
+  await page.goto('http:/localhost:3000/account/adminLogin');
 
   await page.fill('input[name="email"]', process.env.ADMIN_USER || 'admin@admin.com');
   await page.fill('input[name="password"]', process.env.ADMIN_PASS || 'admin');
   await page.click('button:has-text("Log in")');
   await page.waitForTimeout(3000);
-  await page.waitForURL('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
+  await page.waitForURL('http:/localhost:3000/account/adminLogin');
 
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard');
+  await page.goto('http:/localhost:3000/admin/dashboard');
 
 
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard/products');
+  await page.goto('http:/localhost:3000/admin/dashboard/products');
 
   //Obtengo la primer Card de la lista
   const card = await page.locator('.rounded-xl.bg-blue-50').first();
@@ -100,26 +123,29 @@ test('Editar un producto tras iniciar sesion', async ({ page }) => {
   const searchInput = page.locator('input[placeholder="Ingrese un producto..."]');
   await searchInput.fill(productName);
   await searchInput.press("Enter");
+  await page.waitForTimeout(3000);
 
   const productLocator = page.locator('div.rounded-xl.bg-blue-50').first();
   await expect(productLocator).toContainText(productName);
+  await context.clearCookies();
+  await context.clearPermissions();
 });
 
 
-test('Eliminar un producto y verificar que no exista en la busqueda', async ({ page }) => {
+test('Eliminar un producto y verificar que no exista en la busqueda', async ({ page, context }) => {
   //Login
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
+  await page.goto('http:/localhost:3000/account/adminLogin');
 
   await page.fill('input[name="email"]', process.env.ADMIN_USER || 'admin@admin.com');
   await page.fill('input[name="password"]', process.env.ADMIN_PASS || 'admin');
   await page.click('button:has-text("Log in")');
   await page.waitForTimeout(3000);
-  await page.waitForURL('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
+  await page.waitForURL('http:/localhost:3000/account/adminLogin');
 
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard');
+  await page.goto('http:/localhost:3000/admin/dashboard');
 
 
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard/products');
+  await page.goto('http:/localhost:3000/admin/dashboard/products');
 
   // Obtengo la primera Card de la lista
   const card = await page.locator('.rounded-xl.bg-blue-50').first();
@@ -167,23 +193,25 @@ test('Eliminar un producto y verificar que no exista en la busqueda', async ({ p
   }
 
   console.log(' Producto eliminado correctamente y no se encontró en la búsqueda: ${firstCardTitle} (UUID: ${productUUID})');
+  await context.clearCookies();
+  await context.clearPermissions();
 });
 
 
-test('Ver lista de productos', async ({ page }) => {
+test('Ver lista de productos', async ({ page, context }) => {
   //Login
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
+  await page.goto('http:/localhost:3000/account/adminLogin');
 
   await page.fill('input[name="email"]', process.env.ADMIN_USER || 'admin@admin.com');
   await page.fill('input[name="password"]', process.env.ADMIN_PASS || 'admin');
   await page.click('button:has-text("Log in")');
   await page.waitForTimeout(3000);
-  await page.waitForURL('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
+  await page.waitForURL('http:/localhost:3000/account/adminLogin');
 
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard');
+  await page.goto('http:/localhost:3000/admin/dashboard');
 
 
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard/products');
+  await page.goto('http:/localhost:3000/admin/dashboard/products');
 
   // Esperar a que carguen los productos
   await page.waitForSelector('.rounded-xl.bg-blue-50');
@@ -193,23 +221,25 @@ test('Ver lista de productos', async ({ page }) => {
 
   console.log(' Se encontraron ${productCards} productos en la lista.');
   expect(productCards).toBeGreaterThan(0);
+  await context.clearCookies();
+  await context.clearPermissions();
 });
 
 
-test('Obtener detalles del primer producto en la lista', async ({ page }) => {
+test('Obtener detalles del primer producto en la lista', async ({ page, context }) => {
   //Login
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
+  await page.goto('http:/localhost:3000/account/adminLogin');
 
   await page.fill('input[name="email"]', process.env.ADMIN_USER || 'admin@admin.com');
   await page.fill('input[name="password"]', process.env.ADMIN_PASS || 'admin');
   await page.click('button:has-text("Log in")');
   await page.waitForTimeout(3000);
-  await page.waitForURL('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
+  await page.waitForURL('http:/localhost:3000/account/adminLogin');
 
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard');
+  await page.goto('http:/localhost:3000/admin/dashboard');
 
 
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard/products');
+  await page.goto('http:/localhost:3000/admin/dashboard/products');
 
   // Obtener la primera Card de la lista
   const firstCard = await page.locator('.rounded-xl.bg-blue-50').first();
@@ -231,23 +261,23 @@ test('Obtener detalles del primer producto en la lista', async ({ page }) => {
   expect(category).not.toBe("");
   expect(price).not.toBe("");
   expect(description).not.toBe("");
+  await context.clearCookies();
+  await context.clearPermissions();
 });
 
 
-test('Error al crear un producto sin seleccionar imagen', async ({ page }) => {
+test('Error al crear un producto sin seleccionar imagen', async ({ page, context }) => {
   //Login
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
+  await page.goto('http:/localhost:3000/account/adminLogin');
 
   await page.fill('input[name="email"]', process.env.ADMIN_USER || 'admin@admin.com');
   await page.fill('input[name="password"]', process.env.ADMIN_PASS || 'admin');
   await page.click('button:has-text("Log in")');
   await page.waitForTimeout(3000);
-  await page.waitForURL('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
+  await page.waitForURL('http:/localhost:3000/account/adminLogin');
+  await page.goto('http:/localhost:3000/admin/dashboard');
 
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard');
-
-
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard/products/create');
+  await page.goto('http:/localhost:3000/admin/dashboard/products/create');
 
   // Hacer clic en el botón de crear producto sin seleccionar una imagen
   await page.locator('button:has-text("Create Product")').click();
@@ -255,22 +285,24 @@ test('Error al crear un producto sin seleccionar imagen', async ({ page }) => {
   // Verificar que aparece el mensaje de error sobre la imagen
   const errorImage = page.locator('p.text-red-500:has-text("Por favor seleccione una imagen antes de crear el producto.")');
   await expect(errorImage).toBeVisible();
+  await context.clearCookies();
+  await context.clearPermissions();
 });
 
-test('Error al crear un producto sin completar todos los campos', async ({ page }) => {
+test('Error al crear un producto sin completar todos los campos', async ({ page, context }) => {
   //Login
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
+  await page.goto('http:/localhost:3000/account/adminLogin');
 
   await page.fill('input[name="email"]', process.env.ADMIN_USER || 'admin@admin.com');
   await page.fill('input[name="password"]', process.env.ADMIN_PASS || 'admin');
   await page.click('button:has-text("Log in")');
   await page.waitForTimeout(3000);
-  await page.waitForURL('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
+  await page.waitForURL('http:/localhost:3000/account/adminLogin');
 
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard');
+  await page.goto('http:/localhost:3000/admin/dashboard');
 
 
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard/products/create');
+  await page.goto('http:/localhost:3000/admin/dashboard/products/create');
 
   // Subir una imagen local
   const filePath = path.join(process.cwd(), 'tests', 'fallout.jpeg');
@@ -282,28 +314,29 @@ test('Error al crear un producto sin completar todos los campos', async ({ page 
   // Verificar que aparece el mensaje de error sobre los campos faltantes
   const errorFields = page.locator('p.text-red-500:has-text("Por favor complete todos los campos antes de crear el producto.")');
   await expect(errorFields).toBeVisible();
+  await context.clearCookies();
+  await context.clearPermissions();
 });
 
 
-test('Falla al eliminar un producto con URL alterada (404)', async ({ page }) => {
+test('Falla al eliminar un producto con URL alterada (404)', async ({ page, context }) => {
   //Login
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
+  await page.goto('http:/localhost:3000/account/adminLogin');
 
   await page.fill('input[name="email"]', process.env.ADMIN_USER || 'admin@admin.com');
   await page.fill('input[name="password"]', process.env.ADMIN_PASS || 'admin');
   await page.click('button:has-text("Log in")');
   await page.waitForTimeout(3000);
-  await page.waitForURL('https://alba-zanconi-proyecto-nextjs.vercel.app/account/adminLogin');
+  await page.waitForURL('http:/localhost:3000/account/adminLogin');
 
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard');
-
+  await page.goto('http:/localhost:3000/admin/dashboard');
 
   // Ir a la página de productos
-  await page.goto('https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard/products');
+  await page.goto('http:/localhost:3000/admin/dashboard/products');
 
   // Alterar la URL con un UUID inválido
   const uuidAlterado = '00000000-0000-0000-0000-000000000000';
-  const deleteUrl = `https://alba-zanconi-proyecto-nextjs.vercel.app/admin/dashboard/products/delete/${uuidAlterado}`;
+  const deleteUrl = `http:/localhost:3000/admin/dashboard/products/delete/${uuidAlterado}`;
 
   // Intentar acceder a la URL falsa
   await page.goto(deleteUrl);
@@ -311,4 +344,6 @@ test('Falla al eliminar un producto con URL alterada (404)', async ({ page }) =>
   // Verificar que la página muestra un error 404
   await expect(page).toHaveTitle(/404/i);
   await expect(page.locator('text=This page could not be found')).toBeVisible();
+  await context.clearCookies();
+  await context.clearPermissions();
 });
